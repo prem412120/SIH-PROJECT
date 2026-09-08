@@ -1,0 +1,2508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarvyatri | Explore · Plan · Go</title>
+    <!-- Brand Favicon & Mobile Touch Icons -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    <meta property="og:title" content="Sarvyatri | Explore · Plan · Go">
+    <meta property="og:description" content="Smart Indian Travel Architecture & Escrow Booking Portal">
+    <meta property="og:image" content="logo.jpg">
+    <!-- Tailwind CSS CDN -->
+
+<!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="script.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col pb-28 relative">
+
+    <!-- ======================================================== -->
+    <!-- DYNAMIC AMBIENT TRAVEL BACKGROUND & CANVAS PARTICLES -->
+    <!-- ======================================================== -->
+    <div class="sarv-ambient-bg" aria-hidden="true">
+        <div class="ambient-orb ambient-orb-1"></div>
+        <div class="ambient-orb ambient-orb-2"></div>
+        <div class="ambient-orb ambient-orb-3"></div>
+        <div class="ambient-orb ambient-orb-4"></div>
+        <div class="ambient-topography"></div>
+        <canvas id="sarv-ambient-canvas"></canvas>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SVG GOOEY FILTER (Non-blocking, active rendering) -->
+    <!-- ======================================================== -->
+    <svg style="position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <filter id="gooey-filter">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- ======================================================== -->
+    <!-- BRAND LOGO ANIMATED LOADER -->
+    <!-- ======================================================== -->
+    <div id="sarv-global-loader" class="fixed inset-0 modal-backdrop hidden flex flex-col items-center justify-center p-4">
+        <div class="relative flex flex-col items-center">
+            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-white shadow-2xl p-2.5 flex items-center justify-center logo-loader-anim border-2 border-amber-400/50">
+                <img src="logo.jpg" alt="Sarvyatri Official Logo" class="w-full h-full object-contain rounded-2xl" onerror="this.src='assets/logo.jpg'">
+            </div>
+            <div class="mt-5 text-center">
+                <span class="text-xl sm:text-2xl font-black tracking-widest text-white block">SARVYATRI</span>
+                <span class="text-xs font-bold tracking-[0.25em] text-amber-400 uppercase mt-0.5 block">EXPLORE · PLAN · GO</span>
+                <p id="loader-status-text" class="text-xs text-slate-200 font-medium mt-3 animate-pulse">Calculating optimal routes & insights...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- APP HEADER -->
+    <!-- ======================================================== -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-300 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Brand Logo with Authentic Circular Emblem & Typography -->
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="switchPage('home')">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white border-2 border-navy-900 shadow-sm p-0.5 flex items-center justify-center overflow-hidden group-hover:scale-105 group-hover:shadow-md transition-all">
+                    <img src="logo.jpg" alt="Sarvyatri Emblem" class="w-full h-full object-cover object-top" onerror="this.src='assets/logo.jpg'">
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-tight text-navy-900 block leading-none">SARVYATRI</span>
+                    <span class="text-[10px] font-extrabold tracking-[0.2em] text-navy-700 uppercase block mt-1">EXPLORE · PLAN · GO</span>
+                </div>
+            </div>
+
+            <!-- Header Quick Badges & Auth (High Contrast) -->
+            <div class="flex items-center gap-2.5">
+                <button type="button" onclick="openFeedbackModal()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold text-navy-900 hover:bg-slate-100 flex items-center gap-1.5 transition-colors shadow-sm">
+                    <i class="fa-regular fa-comment-dots text-warmOrange-500"></i>
+                    <span class="hidden sm:inline">Feedback</span>
+                </button>
+                <button type="button" onclick="switchPage('navigation-view')" class="p-2 w-9 h-9 rounded-xl bg-navy-100 text-navy-900 flex items-center justify-center hover:bg-navy-200 transition-colors shadow-sm" title="Live Integrated Map">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                </button>
+                <!-- Header CTA with Hover Border Gradient -->
+                <div class="hover-border-gradient">
+                    <button type="button" onclick="openSignupModal()" class="btn-navy px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-user-plus text-amber-400"></i>
+                        <span>Join Club</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- MAIN APPLICATION CONTAINER -->
+    <!-- ======================================================== -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6">
+
+        <!-- ======================================================== -->
+        <!-- PAGE 1: HOME PAGE (Minimal, Focused) -->
+        <!-- ======================================================== -->
+        <section id="view-home" class="app-page active space-y-7">
+            
+            <!-- CINEMATIC HERO BANNER (With Scenic Indian Travel Background Video + Fallback & Canvas Reveal) -->
+            <div class="relative overflow-hidden rounded-3xl text-white shadow-2xl border border-slate-300">
+                
+                <!-- Background Travel Video Layer with Fallback Image -->
+                <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600&auto=format&fit=crop" class="w-full h-full object-cover object-center scale-105">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-winding-road-in-a-forest-41440-large.mp4" type="video/mp4">
+                        <source src="https://cdn.coverr.co/videos/coverr-driving-on-a-road-in-the-mountains-5629/1080p.mp4" type="video/mp4">
+                        <!-- Fallback static image -->
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600&auto=format&fit=crop" alt="Scenic Indian Mountains" class="w-full h-full object-cover">
+                    </video>
+                    <!-- EFFECT: Interactive Canvas Reveal Layer (Non-blocking luminous dot matrix) -->
+                    <canvas id="hero-reveal-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-60"></canvas>
+                    <!-- Layered Dark Contrast Gradients for Guaranteed Text/Button Legibility -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-900/85 to-navy-950/65 backdrop-blur-[1px]"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-transparent to-navy-950/40"></div>
+                </div>
+
+                <!-- Hero Content Layer -->
+                <div class="relative z-10 p-6 sm:p-10 max-w-xl space-y-4">
+                    
+                    <!-- Top Tag -->
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy-950/80 text-amber-300 text-xs font-black tracking-wide border border-amber-400/40 shadow-md">
+                        <i class="fa-solid fa-sparkles text-amber-400"></i>
+                        <span>Smart Indian Travel Architecture</span>
+                    </div>
+
+                    <!-- Container Text Flip Title -->
+                    <div>
+                        <h1 class="text-3xl sm:text-4xl font-black tracking-tight leading-tight text-white drop-shadow-md">
+                            Explore
+                            <span class="flip-container text-amber-400" id="hero-flip-container">
+                                <span class="flip-word flip-in">Himalayan Valleys</span>
+                            </span>
+                            <br>With Real Confidence.
+                        </h1>
+                    </div>
+
+                    <p class="text-slate-200 text-xs sm:text-sm font-medium leading-relaxed drop-shadow">
+                        Multi-stop sequenced routing, live visual map images without highway labels, budget-shielded stays & 20% advance escrow guarantee.
+                    </p>
+
+                    <!-- TWO MAIN BUTTONS: 'Plan a Trip' & 'Quick Access' (High Contrast & Double-Layer Click Binding) -->
+                    <div class="pt-3 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                        <div class="hover-border-gradient">
+                            <button type="button" id="btn-hero-plan" onclick="switchPage('questions')" class="btn-warm font-black px-8 py-4 rounded-2xl text-base flex items-center justify-center gap-3 shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all w-full sm:w-auto">
+                                <i class="fa-solid fa-route text-lg"></i>
+                                <span>Plan a Trip</span>
+                                <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </button>
+                        </div>
+                        <button type="button" id="btn-hero-quick-access" onclick="openQuickAccessModal()" class="px-7 py-4 rounded-2xl text-base font-black bg-navy-900/80 hover:bg-navy-900 text-white backdrop-blur-md border-2 border-amber-400/50 flex items-center justify-center gap-2 shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+                            <i class="fa-solid fa-bolt text-amber-400"></i>
+                            <span>Quick Access</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Subtle Accent Tag at Bottom Right -->
+                <div class="absolute bottom-4 right-5 hidden sm:flex items-center gap-2 text-[11px] font-extrabold text-amber-300/90 z-10">
+                    <i class="fa-solid fa-mountain-sun"></i>
+                    <span>Verified Routes Across 28 Indian States</span>
+                </div>
+            </div>
+
+            <!-- Quick Access Shortcuts Grid (5 High-Contrast Dedicated Buttons with 3D Hover & Glare) -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-black text-navy-900 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-warmOrange-500"></span>
+                        Quick Access Shortcuts
+                    </h2>
+                    <span class="text-xs text-slate-600 font-bold">Essential Travel Utilities</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    
+                    <!-- Shortcut 1: Fuel Pump Finder -->
+                    <button type="button" onclick="openQuickTool('fuel')" class="card-3d-interactive sarv-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 hover:border-warmOrange-500 transition-all cursor-pointer group bg-white border border-slate-300">
+                        <div class="card-3d-glare"></div>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-gas-pump"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Fuel / CNG</span>
+                            <span class="text-[10px] text-slate-500 font-semibold">Nearby Pumps</span>
+                        </div>
+                    </button>
+
+                    <!-- Shortcut 2: Hotel Search -->
+                    <button type="button" onclick="openQuickTool('hotel')" class="card-3d-interactive sarv-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 hover:border-warmOrange-500 transition-all cursor-pointer group bg-white border border-slate-300">
+                        <div class="card-3d-glare"></div>
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-navy-800 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-hotel"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Hotel Search</span>
+                            <span class="text-[10px] text-slate-500 font-semibold">Budget Stays</span>
+                        </div>
+                    </button>
+
+                    <!-- Shortcut 3: Restaurant Search -->
+                    <button type="button" onclick="openQuickTool('restaurant')" class="card-3d-interactive sarv-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 hover:border-warmOrange-500 transition-all cursor-pointer group bg-white border border-slate-300">
+                        <div class="card-3d-glare"></div>
+                        <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Restaurants</span>
+                            <span class="text-[10px] text-slate-500 font-semibold">Dhabas & Food</span>
+                        </div>
+                    </button>
+
+                    <!-- Shortcut 4: Route Navigation / ETA -->
+                    <button type="button" onclick="openQuickTool('navigation')" class="card-3d-interactive sarv-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 hover:border-warmOrange-500 transition-all cursor-pointer group bg-white border border-slate-300">
+                        <div class="card-3d-glare"></div>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-location-arrow"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Route & ETA</span>
+                            <span class="text-[10px] text-slate-500 font-semibold">Live Drive Map</span>
+                        </div>
+                    </button>
+
+                    <!-- Shortcut 5: Direct Taxi Booking -->
+                    <button type="button" onclick="openQuickTool('taxi')" class="card-3d-interactive sarv-card col-span-2 sm:col-span-1 p-4 rounded-2xl flex flex-col items-center text-center gap-2 hover:border-warmOrange-500 transition-all cursor-pointer group bg-white border border-slate-300">
+                        <div class="card-3d-glare"></div>
+                        <div class="w-12 h-12 rounded-2xl bg-yellow-100 text-yellow-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-taxi"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Direct Taxi</span>
+                            <span class="text-[10px] text-slate-500 font-semibold">Instant Cab</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Highlight Section 1: Upcoming Cultural Events & Festivals (High-Contrast & Direction Aware & 3D Tilt) -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-black text-navy-900 flex items-center gap-2">
+                            <i class="fa-solid fa-om text-warmOrange-500"></i>
+                            Upcoming Cultural Events & Festivals Nearby
+                        </h2>
+                        <p class="text-xs text-slate-600 font-semibold">Hover to reveal festival highlights • Click Plan Trip to begin</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Event 1: Dev Deepawali Varanasi -->
+                    <div class="card-3d-interactive sarv-card rounded-2xl overflow-hidden direction-aware-card group border border-slate-300 shadow-sm" data-dir-card>
+                        <div class="card-3d-glare"></div>
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=900&auto=format&fit=crop" 
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1627894483216-2138af692e32?w=900&auto=format&fit=crop';" 
+                                alt="Varanasi Ganga Ghats" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent pointer-events-none"></div>
+                            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-amber-500 text-navy-950 text-[10px] font-black uppercase tracking-wider shadow-md">
+                                Nov 15 - 18, 2026
+                            </span>
+                            <div class="absolute bottom-3 left-3 right-3 text-white">
+                                <span class="text-[11px] font-bold text-amber-300"><i class="fa-solid fa-location-dot mr-1"></i>Varanasi, Uttar Pradesh</span>
+                                <h3 class="text-lg font-black leading-snug">Dev Deepawali (Festival of Lights)</h3>
+                            </div>
+                            <!-- Sleek Non-Obscuring Frosted Glass Drawer -->
+                            <div class="direction-aware-overlay">
+                                <span class="text-amber-400 font-black text-[10px] uppercase tracking-widest block mb-0.5">Cultural Highlights</span>
+                                <p class="text-[11px] text-slate-100 leading-snug">84 ghats glittering with earthen diyas, grand Ganga Maha Aarti, and midnight boat processions.</p>
+                            </div>
+                        </div>
+                        <div class="p-4 flex items-center justify-between bg-white relative z-20">
+                            <div class="text-xs text-slate-700">
+                                <span class="font-bold text-navy-900 block">1 Million Clay Lamps</span>
+                                <span>Ganga Maha Aarti & Classical Music</span>
+                            </div>
+                            <button type="button" onclick="startTripWithDestination('Delhi', 'Varanasi', 'Leisure')" class="btn-warm text-xs font-black px-4 py-2 rounded-xl shadow-md">
+                                Plan Trip
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Event 2: Pushkar Camel Fair -->
+                    <div class="card-3d-interactive sarv-card rounded-2xl overflow-hidden direction-aware-card group border border-slate-300 shadow-sm" data-dir-card>
+                        <div class="card-3d-glare"></div>
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?w=900&auto=format&fit=crop" 
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1477587458883-47145ed94245?w=900&auto=format&fit=crop';" 
+                                alt="Rajasthan Heritage Pushkar" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent pointer-events-none"></div>
+                            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-warmOrange-500 text-white text-[10px] font-black uppercase tracking-wider shadow-md">
+                                Nov 20 - 28, 2026
+                            </span>
+                            <div class="absolute bottom-3 left-3 right-3 text-white">
+                                <span class="text-[11px] font-bold text-amber-300"><i class="fa-solid fa-location-dot mr-1"></i>Pushkar & Ajmer, Rajasthan</span>
+                                <h3 class="text-lg font-black leading-snug">Pushkar International Mela</h3>
+                            </div>
+                            <!-- Sleek Non-Obscuring Frosted Glass Drawer -->
+                            <div class="direction-aware-overlay">
+                                <span class="text-amber-400 font-black text-[10px] uppercase tracking-widest block mb-0.5">Desert Wonder</span>
+                                <p class="text-[11px] text-slate-100 leading-snug">Sunrise hot air balloons, Kalbelia folk performances, sacred lake bathing & luxury desert glamping.</p>
+                            </div>
+                        </div>
+                        <div class="p-4 flex items-center justify-between bg-white relative z-20">
+                            <div class="text-xs text-slate-700">
+                                <span class="font-bold text-navy-900 block">Folk Dance, Glamping & Dunes</span>
+                                <span>Sacred Lake Aarti & Camel Races</span>
+                            </div>
+                            <button type="button" onclick="startTripWithDestination('Jaipur', 'Pushkar', 'Leisure')" class="btn-warm text-xs font-black px-4 py-2 rounded-xl shadow-md">
+                                Plan Trip
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Highlight Section 2: Season-Based Destination Suggestions (Hill Stations) -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-black text-navy-900 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-sun text-amber-500"></i>
+                            Season-Based Destinations (Best Hill Stations This Month)
+                        </h2>
+                        <p class="text-xs text-slate-600 font-semibold">Crisp alpine breezes, cedar trails & panoramic viewpoints</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <!-- Hill Station 1: Manali -->
+                    <div class="card-3d-interactive sarv-card rounded-2xl overflow-hidden direction-aware-card group flex flex-col justify-between border border-slate-300 shadow-sm" data-dir-card>
+                        <div class="card-3d-glare"></div>
+                        <div class="relative h-44 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800&auto=format&fit=crop" 
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop';" 
+                                alt="Manali Mountains Himachal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-navy-950/85 text-white text-[10px] font-extrabold shadow">
+                                14°C - 22°C • Alpine Air
+                            </span>
+                            <!-- Non-Obscuring Frosted Glass Drawer -->
+                            <div class="direction-aware-overlay">
+                                <span class="text-amber-400 font-black text-[10px] uppercase">Best Time To Visit</span>
+                                <p class="text-[11px] text-slate-100 leading-snug">Solang paragliding, Rohtang snowy passes & fresh cedar trails.</p>
+                            </div>
+                        </div>
+                        <div class="p-3.5 space-y-2 bg-white relative z-20">
+                            <div>
+                                <h4 class="font-black text-sm text-navy-900">Manali & Solang Valley</h4>
+                                <p class="text-[11px] text-slate-600 font-medium">Himachal Pradesh • Pine ridges & Atal Tunnel</p>
+                            </div>
+                            <div class="flex items-center justify-between pt-1 border-t border-slate-100">
+                                <span class="text-xs font-extrabold text-navy-900">From ₹6,500</span>
+                                <button type="button" onclick="startTripWithDestination('Chandigarh', 'Manali', 'Leisure')" class="btn-warm text-[11px] font-bold px-3.5 py-1.5 rounded-lg shadow-sm">
+                                    Explore
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hill Station 2: Munnar -->
+                    <div class="card-3d-interactive sarv-card rounded-2xl overflow-hidden direction-aware-card group flex flex-col justify-between border border-slate-300 shadow-sm" data-dir-card>
+                        <div class="card-3d-glare"></div>
+                        <div class="relative h-44 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=800&auto=format&fit=crop" 
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&auto=format&fit=crop';" 
+                                alt="Munnar Tea Hills Kerala" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-navy-950/85 text-white text-[10px] font-extrabold shadow">
+                                17°C - 24°C • Misty Gardens
+                            </span>
+                            <!-- Non-Obscuring Frosted Glass Drawer -->
+                            <div class="direction-aware-overlay">
+                                <span class="text-amber-400 font-black text-[10px] uppercase">Western Ghats</span>
+                                <p class="text-[11px] text-slate-100 leading-snug">Lush tea slope strolls, Mattupetty boating & cool misty mornings.</p>
+                            </div>
+                        </div>
+                        <div class="p-3.5 space-y-2 bg-white relative z-20">
+                            <div>
+                                <h4 class="font-black text-sm text-navy-900">Munnar & Anamudi</h4>
+                                <p class="text-[11px] text-slate-600 font-medium">Kerala • Rolling tea slopes & waterfalls</p>
+                            </div>
+                            <div class="flex items-center justify-between pt-1 border-t border-slate-100">
+                                <span class="text-xs font-extrabold text-navy-900">From ₹5,800</span>
+                                <button type="button" onclick="startTripWithDestination('Kochi', 'Munnar', 'Leisure')" class="btn-warm text-[11px] font-bold px-3.5 py-1.5 rounded-lg shadow-sm">
+                                    Explore
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hill Station 3: Nainital -->
+                    <div class="card-3d-interactive sarv-card rounded-2xl overflow-hidden direction-aware-card group flex flex-col justify-between border border-slate-300 shadow-sm" data-dir-card>
+                        <div class="card-3d-glare"></div>
+                        <div class="relative h-44 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1605649487212-47bdab064df8?w=800&auto=format&fit=crop" 
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&auto=format&fit=crop';" 
+                                alt="Nainital Lake Uttarakhand" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-navy-950/85 text-white text-[10px] font-extrabold shadow">
+                                12°C - 20°C • Lake Breeze
+                            </span>
+                            <!-- Non-Obscuring Frosted Glass Drawer -->
+                            <div class="direction-aware-overlay">
+                                <span class="text-amber-400 font-black text-[10px] uppercase">Kumaon Lakes</span>
+                                <p class="text-[11px] text-slate-100 leading-snug">Emerald lake yachting, Mall Road evening walks & cable car views.</p>
+                            </div>
+                        </div>
+                        <div class="p-3.5 space-y-2 bg-white relative z-20">
+                            <div>
+                                <h4 class="font-black text-sm text-navy-900">Nainital & Bhimtal</h4>
+                                <p class="text-[11px] text-slate-600 font-medium">Uttarakhand • Emerald lakes & yachting</p>
+                            </div>
+                            <div class="flex items-center justify-between pt-1 border-t border-slate-100">
+                                <span class="text-xs font-extrabold text-navy-900">From ₹4,900</span>
+                                <button type="button" onclick="startTripWithDestination('Delhi', 'Nainital', 'Leisure')" class="btn-warm text-[11px] font-bold px-3.5 py-1.5 rounded-lg shadow-sm">
+                                    Explore
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Member Join Banner with Gradient Glow -->
+            <div class="p-6 sm:p-7 rounded-3xl bg-gradient-to-r from-navy-900 to-navy-950 text-white flex flex-col sm:flex-row items-center justify-between gap-5 border border-navy-800 shadow-xl">
+                <div class="space-y-1.5 text-center sm:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-[11px] font-black border border-amber-400/30">
+                        <i class="fa-solid fa-crown"></i>
+                        <span>Sarvyatri Circle Membership</span>
+                    </div>
+                    <h3 class="text-xl font-black text-white">Join 45,000+ Verified Road & Rail Travelers</h3>
+                    <p class="text-xs text-slate-300 max-w-md">Enjoy 100% advance payment escrow guarantee, real-time highway alert sync, and ₹0 cancellation fees on partner stays.</p>
+                </div>
+                <div class="hover-border-gradient">
+                    <button type="button" onclick="openSignupModal()" class="btn-warm font-black px-6 py-3.5 rounded-2xl text-xs sm:text-sm whitespace-nowrap shadow-xl">
+                        Create Free Account
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- PAGE 2: TRIP QUESTIONS / PLANNER -->
+        <!-- ======================================================== -->
+        <section id="view-questions" class="app-page space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-black tracking-widest text-warmOrange-600 uppercase">Step 1 of 5 • Trip Customizer</span>
+                    <h2 class="text-2xl font-black text-navy-900">Trip Customizer</h2>
+                </div>
+                <button type="button" onclick="goBack()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy-900 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm border border-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back to Home</span>
+                </button>
+            </div>
+
+            <div class="sarv-card p-5 sm:p-6 rounded-3xl space-y-5 border border-slate-300 shadow-md">
+                <!-- Source and Destination with Gooey Input -->
+                <div class="space-y-3">
+                    <label class="text-xs font-black text-navy-900 uppercase tracking-wider block">Source & Destination</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="gooey-wrapper p-3 rounded-2xl border border-slate-300 bg-white shadow-sm">
+                            <i class="fa-solid fa-location-crosshairs text-warmOrange-500 mr-2 text-sm"></i>
+                            <input type="text" id="trip-source" value="Delhi" placeholder="Starting Point (City or Landmark)" 
+                                class="gooey-input-field w-full font-bold text-xs text-navy-900 outline-none">
+                            <div class="gooey-blob-container"><div class="gooey-blob-1"></div><div class="gooey-blob-2"></div></div>
+                        </div>
+                        <div class="gooey-wrapper p-3 rounded-2xl border border-slate-300 bg-white shadow-sm">
+                            <i class="fa-solid fa-flag-checkered text-navy-800 mr-2 text-sm"></i>
+                            <input type="text" id="trip-destination" value="Manali" placeholder="Ending Point (Destination)" 
+                                class="gooey-input-field w-full font-bold text-xs text-navy-900 outline-none">
+                            <div class="gooey-blob-container"><div class="gooey-blob-1"></div><div class="gooey-blob-2"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Travel Mode Selection (Bug 1 Fix) -->
+                <div class="space-y-2 pt-1">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-black text-navy-900 uppercase tracking-wider block">Travel Mode</label>
+                        <span class="text-[11px] text-slate-500 font-semibold">Select your preferred transport mode</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button type="button" onclick="setTravelMode('car')" id="mode-btn-car" class="p-3 rounded-2xl border-2 border-warmOrange-500 bg-amber-50 text-navy-900 flex flex-col items-center gap-1.5 transition-all shadow-sm">
+                            <i class="fa-solid fa-car text-warmOrange-600 text-base"></i>
+                            <span class="font-extrabold text-xs">Car / Drive</span>
+                        </button>
+                        <button type="button" onclick="setTravelMode('bus')" id="mode-btn-bus" class="p-3 rounded-2xl border border-slate-300 bg-white text-navy-900 flex flex-col items-center gap-1.5 hover:border-slate-400 transition-all shadow-sm">
+                            <i class="fa-solid fa-bus text-blue-600 text-base"></i>
+                            <span class="font-bold text-xs">Bus</span>
+                        </button>
+                        <button type="button" onclick="setTravelMode('train')" id="mode-btn-train" class="p-3 rounded-2xl border border-slate-300 bg-white text-navy-900 flex flex-col items-center gap-1.5 hover:border-slate-400 transition-all shadow-sm">
+                            <i class="fa-solid fa-train-subway text-emerald-600 text-base"></i>
+                            <span class="font-bold text-xs">Train</span>
+                        </button>
+                        <button type="button" onclick="setTravelMode('taxi')" id="mode-btn-taxi" class="p-3 rounded-2xl border border-slate-300 bg-white text-navy-900 flex flex-col items-center gap-1.5 hover:border-slate-400 transition-all shadow-sm">
+                            <i class="fa-solid fa-taxi text-amber-600 text-base"></i>
+                            <span class="font-bold text-xs">Cab / Taxi</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Multi-Stop Sequencer (Add Stop Control) -->
+                <div class="space-y-3 pt-1">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-black text-navy-900 uppercase tracking-wider block">Multi-Stop Sequencer</span>
+                            <span class="text-[11px] text-slate-500 font-semibold">Rearrange or add waypoints along your trail</span>
+                        </div>
+                        <button type="button" onclick="addStop()" class="text-xs font-black text-warmOrange-600 hover:text-warmOrange-700 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-plus"></i>
+                            <span>Add Stop</span>
+                        </button>
+                    </div>
+                    <div id="stops-container" class="space-y-2">
+                        <!-- Dynamic Stops with Sequential Indicators -->
+                    </div>
+                </div>
+
+                <!-- Direction & Duration -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    <div>
+                        <label class="text-xs font-black text-navy-900 uppercase tracking-wider block mb-2">Trip Direction</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" onclick="setTripDirection('oneway')" id="btn-dir-oneway" class="py-2.5 px-4 rounded-xl font-black text-xs border border-navy-900 bg-navy-900 text-white transition-all shadow-sm">
+                                One-Way
+                            </button>
+                            <button type="button" onclick="setTripDirection('roundtrip')" id="btn-dir-roundtrip" class="py-2.5 px-4 rounded-xl font-bold text-xs border border-slate-300 bg-white text-navy-900 hover:border-slate-400 transition-all shadow-sm">
+                                Round-Trip
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-black text-navy-900 uppercase tracking-wider block mb-2">Total Travelers</label>
+                        <div class="flex items-center gap-3">
+                            <button type="button" onclick="changeMembers(-1)" class="w-9 h-9 rounded-xl border border-slate-300 bg-white font-black text-navy-900 hover:bg-slate-50 shadow-sm">-</button>
+                            <div class="flex-1 text-center font-black text-sm text-navy-900">
+                                <span id="members-count-display">2</span> Travelers
+                            </div>
+                            <button type="button" onclick="changeMembers(1)" class="w-9 h-9 rounded-xl border border-slate-300 bg-white font-black text-navy-900 hover:bg-slate-50 shadow-sm">+</button>
+                            <input type="range" id="members-slider" min="1" max="15" value="2" class="hidden" oninput="onMembersSliderChange(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Travel Purpose Selection -->
+                <div class="space-y-2 pt-1">
+                    <label class="text-xs font-black text-navy-900 uppercase tracking-wider block">Travel Purpose</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button type="button" onclick="setTripPurpose('leisure')" id="purpose-btn-leisure" class="p-3 rounded-2xl border-2 border-warmOrange-500 bg-amber-50 text-navy-900 font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-sm">
+                            <i class="fa-solid fa-umbrella-beach text-warmOrange-600"></i>
+                            <span>Leisure</span>
+                        </button>
+                        <button type="button" onclick="setTripPurpose('adventure')" id="purpose-btn-adventure" class="p-3 rounded-2xl border border-slate-300 bg-white text-navy-900 font-bold text-xs flex items-center justify-center gap-2 hover:border-slate-400 transition-all shadow-sm">
+                            <i class="fa-solid fa-hiking text-emerald-600"></i>
+                            <span>Adventure</span>
+                        </button>
+                        <button type="button" onclick="setTripPurpose('religious')" id="purpose-btn-religious" class="p-3 rounded-2xl border border-slate-300 bg-white text-navy-900 font-bold text-xs flex items-center justify-center gap-2 hover:border-slate-400 transition-all shadow-sm">
+                            <i class="fa-solid fa-om text-orange-600"></i>
+                            <span>Pilgrimage</span>
+                        </button>
+                        <button type="button" onclick="setTripPurpose('business')" id="purpose-btn-business" class="p-3 rounded-2xl border border-slate-300 bg-white text-navy-900 font-bold text-xs flex items-center justify-center gap-2 hover:border-slate-400 transition-all shadow-sm">
+                            <i class="fa-solid fa-briefcase text-navy-700"></i>
+                            <span>Business</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Days & Nights Counter -->
+                <div class="space-y-2 pt-1">
+                    <label class="text-xs font-black text-navy-900 uppercase tracking-wider block">Trip Duration</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase block mb-1">Days</label>
+                            <input type="number" id="trip-days" value="4" min="1" max="30" onchange="updateDuration(this.value, null)" class="w-full p-2 rounded-xl border border-slate-300 font-bold text-xs text-navy-900 bg-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase block mb-1">Nights</label>
+                            <input type="number" id="trip-nights" value="3" min="0" max="30" onchange="updateDuration(null, this.value)" class="w-full p-2 rounded-xl border border-slate-300 font-bold text-xs text-navy-900 bg-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trip Budget Allocation (Bug 2 Fix) -->
+                <div class="space-y-3 pt-1">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-xs font-black text-navy-900 uppercase tracking-wider block">Trip Budget Allocation</label>
+                            <span class="text-[11px] text-slate-500 font-semibold">Total estimated budget across all members & stays</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Allocated Budget</span>
+                            <span id="budget-val-label" class="text-base sm:text-lg font-black text-warmOrange-600 leading-none">₹16,000</span>
+                        </div>
+                    </div>
+
+                    <!-- Range Slider with Min/Max Bounds -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                        <input type="range" id="budget-slider" value="16000" min="5000" max="60000" step="500"
+                            oninput="onBudgetSliderChange(this.value)"
+                            class="w-full accent-warmOrange-500 cursor-pointer h-2 bg-slate-200 rounded-lg">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-slate-500">
+                            <span id="budget-min-bound">Min: ₹5,000</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Slide to adjust budget</span>
+                            <span id="budget-max-bound">Max: ₹60,000</span>
+                        </div>
+                    </div>
+
+                    <!-- Manual Budget Toggle & Input Wrapper -->
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer select-none text-xs font-bold text-slate-700">
+                            <input type="checkbox" id="manual-budget-toggle" onchange="toggleManualBudget(this.checked)" class="w-4 h-4 rounded text-warmOrange-500 focus:ring-warmOrange-400 border-slate-300">
+                            <span>My budget is below the minimum — let me type it in manually</span>
+                        </label>
+                        <div id="manual-budget-input-wrap" class="hidden p-3 rounded-2xl border border-amber-300 bg-amber-50/70 flex items-center gap-3">
+                            <span class="text-xs font-black text-navy-900 shrink-0">Enter Custom Budget (₹):</span>
+                            <div class="gooey-wrapper flex-1">
+                                <input type="number" id="manual-budget-input" min="500" step="500" placeholder="e.g. 8000"
+                                    oninput="onManualBudgetInput(this.value)"
+                                    class="gooey-input-field w-full p-2 rounded-xl border border-slate-300 bg-white font-black text-xs text-navy-900 outline-none">
+                                <div class="gooey-blob-container"><div class="gooey-blob-1"></div><div class="gooey-blob-2"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Actions: Back + Continue -->
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button type="button" onclick="goBack()" class="px-6 py-3.5 rounded-2xl border-2 border-slate-300 bg-white hover:bg-slate-100 text-navy-900 font-black text-sm flex items-center justify-center gap-2 shadow-sm transition-all sm:w-auto">
+                        <i class="fa-solid fa-arrow-left"></i><span>Back to Home</span>
+                    </button>
+                    <button type="button" onclick="proceedFromQuestions()" class="btn-warm flex-1 py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl">
+                        <span>Continue to Route & Transport Details</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- PAGE 3A: CAR TRAVELERS -->
+        <!-- ======================================================== -->
+        <section id="view-car" class="app-page space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-black tracking-widest text-warmOrange-600 uppercase">Step 2 of 5 • Road Journey</span>
+                    <h2 class="text-2xl font-black text-navy-900">Car Travelers Portal</h2>
+                </div>
+                <button type="button" onclick="goBack()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy-900 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm border border-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                </button>
+            </div>
+
+            <!-- Vehicle Number Plates -->
+            <div class="sarv-card p-5 sm:p-6 rounded-3xl space-y-4 border border-slate-300 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-black text-navy-900 uppercase tracking-wider">Registered Vehicles</h3>
+                        <p class="text-xs text-slate-600 font-medium">Add number plates and fuel types for accurate pump routing</p>
+                    </div>
+                    <button type="button" onclick="addVehiclePlate()" class="text-xs font-black text-warmOrange-600 hover:text-warmOrange-700 flex items-center gap-1">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Add Vehicle</span>
+                    </button>
+                </div>
+                <div id="vehicle-list-container" class="space-y-3">
+                    <!-- Dynamic Vehicle Inputs -->
+                </div>
+            </div>
+
+            <!-- Visual Route Previews (STRICT RULE: NO HIGHWAY NAMES/NUMBERS AS TEXT) -->
+            <div class="sarv-card p-5 sm:p-6 rounded-3xl space-y-4 border border-slate-300 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div>
+                        <h3 class="text-sm font-black text-navy-900 uppercase tracking-wider">Visual Route Preview & Selection</h3>
+                        <p class="text-xs text-slate-600 font-medium">Select your preferred route from the 3 verified corridors below to reveal dedicated fuel stations, stops & road details</p>
+                    </div>
+                    <span class="text-[10px] font-black uppercase px-3 py-1 rounded-full bg-amber-100 text-warmOrange-700 w-fit">
+                        Step: Select 1 Route
+                    </span>
+                </div>
+
+                <!-- 3-Route Interactive Selection Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="routes-preview-grid">
+                    <!-- Dynamic Route Cards rendered via renderRoutes() -->
+                </div>
+            </div>
+
+            <!-- Dynamic Route-Specific Details Panel (Fuel stations, waypoints, dining) -->
+            <div id="selected-route-details-panel" class="space-y-4">
+                <!-- Dynamically populated via renderSelectedRouteDetails() -->
+            </div>
+
+            <!-- Action Bar: Back to Questions & Proceed to Places -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button type="button" onclick="goBack()" class="px-6 py-3.5 rounded-2xl border-2 border-slate-300 bg-white hover:bg-slate-100 text-navy-900 font-black text-sm flex items-center justify-center gap-2 shadow-sm transition-all sm:w-auto">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back to Questions</span>
+                </button>
+                <button type="button" onclick="switchPage('places')" class="btn-warm flex-1 py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl">
+                    <span>Proceed to Sightseeing & Places</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- PAGE 3B: BUS / TRAIN / TAXI TRAVELERS -->
+        <!-- ======================================================== -->
+        <section id="view-transit" class="app-page space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-black tracking-widest text-warmOrange-600 uppercase">Step 2 of 5 • Public Transit</span>
+                    <h2 class="text-2xl font-black text-navy-900" id="transit-page-title">Public Transit Options</h2>
+                </div>
+                <button type="button" onclick="goBack()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy-900 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm border border-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                </button>
+            </div>
+
+            <!-- Class / Type Selection -->
+            <div class="sarv-card p-5 sm:p-6 rounded-3xl space-y-4 border border-slate-300 shadow-sm">
+                <label class="text-xs font-black text-navy-900 uppercase tracking-wider block">Class & Coach Category</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="transit-classes-grid">
+                    <!-- Dynamic Class Options -->
+                </div>
+            </div>
+
+            <!-- Low-Budget Protection Alert -->
+            <div id="low-budget-alert" class="hidden p-4 rounded-2xl bg-rose-50 border-2 border-rose-300 space-y-2">
+                <div class="flex items-center gap-2 text-rose-800 font-black text-xs">
+                    <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                    <span>Budget Warning: Insufficient for selected travel class</span>
+                </div>
+                <p class="text-xs text-rose-700 leading-relaxed font-medium">
+                    The calculated fare (₹<span id="low-budget-calc-val">0</span>) exceeds your allocated travel budget. Choose an action:
+                </p>
+                <div class="flex flex-wrap gap-2 pt-1">
+                    <button type="button" onclick="resolveLowBudget('economy')" class="btn-warm text-xs font-extrabold px-3.5 py-2 rounded-xl">
+                        Switch to Economy Class
+                    </button>
+                    <button type="button" onclick="resolveLowBudget('arrange')" class="btn-navy text-xs font-extrabold px-3.5 py-2 rounded-xl">
+                        Arrange Ticket Myself
+                    </button>
+                    <button type="button" onclick="resolveLowBudget('increase')" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-navy-900 font-extrabold text-xs hover:bg-slate-50">
+                        Adjust in Customizer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Matching Ticket Options -->
+            <div class="sarv-card p-5 sm:p-6 rounded-3xl space-y-4 border border-slate-300 shadow-sm">
+                <h3 class="text-sm font-black text-navy-900 uppercase tracking-wider">Matching Ticket Options & Approximate Costs</h3>
+                <div class="space-y-3" id="ticket-options-container">
+                    <!-- Dynamic Ticket Cards -->
+                </div>
+            </div>
+
+            <!-- Taxi Specific Options -->
+            <div id="taxi-options-wrap" class="hidden sarv-card p-5 sm:p-6 rounded-3xl space-y-4 border border-slate-300 shadow-sm">
+                <h3 class="text-sm font-black text-navy-900 uppercase tracking-wider">Taxi Dispatch Strategy</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button type="button" onclick="setTaxiType('fixed')" id="btn-taxi-fixed" class="p-4 rounded-2xl border-2 border-warmOrange-500 bg-amber-50 text-left space-y-1 transition-all">
+                        <div class="flex justify-between items-center">
+                            <span class="font-black text-xs text-navy-900">Fixed-Schedule Pre-Quoted</span>
+                            <i class="fa-solid fa-circle-check text-warmOrange-500"></i>
+                        </div>
+                        <p class="text-[11px] text-slate-700 font-medium">Guaranteed fixed fare locked upfront with planned pickup and drop times.</p>
+                    </button>
+                    <button type="button" onclick="setTaxiType('metered')" id="btn-taxi-metered" class="p-4 rounded-2xl border border-slate-300 bg-white text-left space-y-1 hover:border-slate-400 transition-all">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-xs text-navy-900">Open-Timing Metered</span>
+                            <i class="fa-regular fa-circle text-slate-400"></i>
+                        </div>
+                        <p class="text-[11px] text-slate-700 font-medium">Flexible halts with standard per-km metered calculation plus driver allowance.</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Bar: Back to Questions & Proceed to Places -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button type="button" onclick="goBack()" class="px-6 py-3.5 rounded-2xl border-2 border-slate-300 bg-white hover:bg-slate-100 text-navy-900 font-black text-sm flex items-center justify-center gap-2 shadow-sm transition-all sm:w-auto">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back to Questions</span>
+                </button>
+                <button type="button" onclick="switchPage('places')" class="btn-warm flex-1 py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl">
+                    <span>Proceed to Sightseeing & Places</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- PAGE 4: PLACES & SIGHTSEEING -->
+        <!-- ======================================================== -->
+        <section id="view-places" class="app-page space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-black tracking-widest text-warmOrange-600 uppercase">Step 3 of 5 • Attractions & Scenery</span>
+                    <h2 class="text-2xl font-black text-navy-900">Places & Sightseeing</h2>
+                </div>
+                <button type="button" onclick="goBack()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy-900 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm border border-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                </button>
+            </div>
+
+            <!-- Connected Trip Itinerary Context Banner -->
+            <div class="p-3.5 rounded-2xl bg-gradient-to-r from-navy-900 to-navy-950 text-white flex flex-wrap items-center justify-between gap-3 shadow-md border border-navy-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-warmOrange-500 text-white flex items-center justify-center text-sm font-black shrink-0">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">Connected Trip Route</span>
+                        <span id="places-route-badge" class="text-xs font-black text-white">Scenic Foothills Corridor (536 km)</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="px-2.5 py-1 rounded-lg bg-white/10 text-slate-200 font-bold">Destination: Manali</span>
+                    <span id="places-trip-duration-badge" class="px-2.5 py-1 rounded-lg bg-warmOrange-500/20 text-warmOrange-300 font-black border border-warmOrange-500/40">4 Days / 3 Nights</span>
+                </div>
+            </div>
+
+            <!-- Active Itinerary Live Tray (Saved Places Counter + Instant Chips) -->
+            <div class="sarv-card p-4 rounded-2xl border-2 border-warmOrange-400 bg-amber-50/50 space-y-3 shadow-sm" id="selected-places-tray-card">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-warmOrange-500 text-white text-xs font-black flex items-center justify-center">
+                            <i class="fa-solid fa-suitcase-rolling"></i>
+                        </span>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xs font-black text-navy-900 uppercase tracking-wider">Saved In Trip Itinerary</h3>
+                                <span id="saved-places-counter-badge" class="px-2 py-0.5 rounded-full bg-warmOrange-600 text-white text-[10px] font-black shadow-sm">
+                                    4 Places Saved
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-slate-600 font-medium">These sights will be scheduled into your itinerary and mapped into your hotel stay.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="selectAllPlaces()" class="px-2.5 py-1 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-navy-900 font-bold text-[11px] shadow-sm">
+                            Select All
+                        </button>
+                        <button type="button" onclick="clearAllPlaces()" class="px-2.5 py-1 rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:text-rose-700 text-slate-700 font-bold text-[11px] shadow-sm">
+                            Clear All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chips container for saved places -->
+                <div id="selected-places-chips" class="flex flex-wrap gap-2 pt-1">
+                    <!-- Dynamic chips rendered by updateSelectedPlacesTray() -->
+                </div>
+            </div>
+
+            <!-- Search to Add Custom Places to Trip -->
+            <div class="sarv-card p-4 rounded-2xl space-y-2 border border-slate-300 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-black text-navy-900 uppercase tracking-wider block">Search & Add Any Custom Place to Trip</label>
+                    <span class="text-[10px] font-bold text-slate-500">Custom additions are saved into your trip automatically</span>
+                </div>
+                <div class="flex gap-2">
+                    <div class="gooey-wrapper flex-1 p-2.5 rounded-xl border border-slate-300 bg-slate-50 flex items-center">
+                        <i class="fa-solid fa-magnifying-glass text-slate-500 mr-2 text-xs"></i>
+                        <input type="text" id="custom-place-input" onkeydown="if(event.key==='Enter') addCustomPlace()" placeholder="Search place (e.g. Rohtang Pass, Bhrigu Lake, Naggar Castle, Old Manali Cafe)..." class="gooey-input-field w-full font-bold text-xs text-navy-900 outline-none bg-transparent">
+                        <div class="gooey-blob-container"><div class="gooey-blob-1"></div><div class="gooey-blob-2"></div></div>
+                    </div>
+                    <button type="button" onclick="addCustomPlace()" class="btn-warm px-4 py-2 rounded-xl text-xs font-black shrink-0 shadow-md flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add to Trip</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cultural / Religious Etiquette Guidelines -->
+            <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 space-y-2 shadow-sm">
+                <div class="flex items-center gap-2 text-navy-900 font-black text-xs">
+                    <i class="fa-solid fa-hands-praying text-warmOrange-600 text-sm"></i>
+                    <span>Cultural & Religious Etiquette Guidelines</span>
+                </div>
+                <ul class="text-xs text-slate-800 list-disc list-inside space-y-1 pl-1 font-medium">
+                    <li>Please remove footwear before stepping onto temple and sanctum premises.</li>
+                    <li>Modest dress covering shoulders and knees is mandatory in monastic sanctuaries.</li>
+                    <li>Photography of sacred deity idols or ritual cremations is strictly prohibited.</li>
+                </ul>
+            </div>
+
+            <!-- Category Filter Chips & Places Grid -->
+            <div class="space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-sm font-black text-navy-900 uppercase tracking-wider">Curated Sights & Experiences</h3>
+                        <p class="text-xs text-slate-600 font-medium">Toggle places to include or exclude them from your trip itinerary, or remove unwanted suggestions</p>
+                    </div>
+                    <!-- Category Chips -->
+                    <div class="flex flex-wrap gap-1.5" id="places-category-chips">
+                        <button type="button" onclick="filterPlacesCategory('all')" class="place-cat-chip active px-3 py-1.5 rounded-xl text-xs font-black transition-all bg-navy-900 text-white shadow-sm" data-pcat="all">All Sights</button>
+                        <button type="button" onclick="filterPlacesCategory('Himalayan Nature')" class="place-cat-chip px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-white border border-slate-300 text-slate-700 hover:border-slate-400" data-pcat="Himalayan Nature">Nature & Treks</button>
+                        <button type="button" onclick="filterPlacesCategory('Historic & Cultural')" class="place-cat-chip px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-white border border-slate-300 text-slate-700 hover:border-slate-400" data-pcat="Historic & Cultural">Historic & Culture</button>
+                        <button type="button" onclick="filterPlacesCategory('Adventure Sports & Snow')" class="place-cat-chip px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-white border border-slate-300 text-slate-700 hover:border-slate-400" data-pcat="Adventure Sports & Snow">Adventure & Snow</button>
+                        <button type="button" onclick="filterPlacesCategory('Leisure & Hot Springs')" class="place-cat-chip px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-white border border-slate-300 text-slate-700 hover:border-slate-400" data-pcat="Leisure & Hot Springs">Hot Springs & Cafes</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="places-grid-container">
+                    <!-- Dynamic Sights Cards rendered via renderPlaces() -->
+                </div>
+            </div>
+
+            <!-- Action Bar: Back to Transport & Save Places Proceed to Hotels -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button type="button" onclick="goBack()" class="px-6 py-3.5 rounded-2xl border-2 border-slate-300 bg-white hover:bg-slate-100 text-navy-900 font-black text-sm flex items-center justify-center gap-2 shadow-sm transition-all sm:w-auto">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back to Transport</span>
+                </button>
+                <button type="button" onclick="savePlacesAndProceed()" class="btn-warm flex-1 py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl">
+                    <span id="save-places-btn-text">Save Selected Places & Proceed to Hotels</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- PAGE 5: HOTELS & ESCROW BOOKING -->
+        <!-- ======================================================== -->
+        <section id="view-hotels" class="app-page space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-black tracking-widest text-warmOrange-600 uppercase">Step 4 of 5 • Verified Accommodations</span>
+                    <h2 class="text-2xl font-black text-navy-900">Hotels & Advance Escrow</h2>
+                </div>
+                <button type="button" onclick="goBack()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy-900 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm border border-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                </button>
+            </div>
+
+            <!-- Connected Trip Itinerary Overview Header -->
+            <div class="p-4 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-950 to-slate-900 text-white space-y-3 shadow-md border border-navy-800">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-navy-800 pb-2.5">
+                    <div class="flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-amber-400 text-navy-950 font-black text-xs flex items-center justify-center">
+                            <i class="fa-solid fa-route"></i>
+                        </span>
+                        <div>
+                            <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">Trip Summary & Route</span>
+                            <h4 id="hotels-trip-title" class="text-xs font-black text-white">Route: Scenic Foothills Corridor • Manali</h4>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="hotels-saved-places-pill" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-extrabold text-[11px] border border-emerald-500/40">
+                            4 Places Saved in Trip
+                        </span>
+                        <span id="hotels-nights-pill" class="px-2.5 py-1 rounded-lg bg-white/10 text-slate-200 font-extrabold text-[11px]">
+                            3 Nights Stay
+                        </span>
+                    </div>
+                </div>
+
+                <div class="text-[11px] text-slate-300 flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span><i class="fa-solid fa-user-group text-amber-400 mr-1"></i> <span id="hotels-members-summary">2 Travelers</span></span>
+                    <span><i class="fa-solid fa-wallet text-amber-400 mr-1"></i> <span id="hotels-budget-summary">Trip Budget: ₹16,000</span></span>
+                    <span><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> <span>20% Advance Escrow Protection Active</span></span>
+                </div>
+            </div>
+
+            <!-- Escrow Advance Booking Highlight Box -->
+            <div class="p-4 rounded-2xl bg-navy-900 text-white space-y-2 border border-navy-700 shadow-md">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-amber-400 text-navy-950 font-black text-xs flex items-center justify-center">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </span>
+                    <h3 class="text-sm font-black text-amber-300 uppercase tracking-wider">Advance Booking Escrow Protection</h3>
+                </div>
+                <p class="text-xs text-slate-200 leading-relaxed">
+                    Book with total peace of mind: Pay only a <strong>20% security deposit</strong> upfront to lock in your room. The remaining 80% balance is released to the hotel strictly <strong>after your verified checkout</strong>.
+                </p>
+            </div>
+
+            <!-- Hotel Search & Category Filter Controls -->
+            <div class="sarv-card p-4 rounded-2xl space-y-3 border border-slate-300 shadow-sm">
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <!-- Search Input -->
+                    <div class="gooey-wrapper flex-1 p-2.5 rounded-xl border border-slate-300 bg-slate-50 flex items-center">
+                        <i class="fa-solid fa-magnifying-glass text-slate-500 mr-2 text-xs"></i>
+                        <input type="text" id="hotel-search-input" oninput="filterHotelsList()" placeholder="Search hotels by name, location, or feature (e.g. Cedar, Chalet, Workation, River)..." class="gooey-input-field w-full font-bold text-xs text-navy-900 outline-none bg-transparent">
+                        <div class="gooey-blob-container"><div class="gooey-blob-1"></div><div class="gooey-blob-2"></div></div>
+                    </div>
+                </div>
+
+                <!-- Hotel Category Chips -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-200">
+                    <span class="text-xs font-black text-navy-900 uppercase tracking-wider">Filter By Type:</span>
+                    <div class="flex flex-wrap gap-1.5" id="hotel-category-chips">
+                        <button type="button" onclick="filterHotelsCategory('all')" class="hotel-cat-chip active px-3 py-1 rounded-xl text-xs font-black bg-navy-900 text-white transition-all shadow-sm" data-hcat="all">All Stays (3)</button>
+                        <button type="button" onclick="filterHotelsCategory('Luxury Heritage Resort')" class="hotel-cat-chip px-3 py-1 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:border-slate-400 transition-all" data-hcat="Luxury Heritage Resort">Luxury Resorts</button>
+                        <button type="button" onclick="filterHotelsCategory('Boutique Wooden Cottage')" class="hotel-cat-chip px-3 py-1 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:border-slate-400 transition-all" data-hcat="Boutique Wooden Cottage">Boutique Chalets</button>
+                        <button type="button" onclick="filterHotelsCategory('Verified Budget Homestay')" class="hotel-cat-chip px-3 py-1 rounded-xl text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:border-slate-400 transition-all" data-hcat="Verified Budget Homestay">Budget & Workation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Listings Filtered by Budget + Native Ad Placements -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-black text-navy-900 uppercase tracking-wider">Recommended Stays Within Your Budget</h3>
+                    <span class="text-xs font-extrabold text-warmOrange-600">Budget Safe Filters Active</span>
+                </div>
+
+                <div class="space-y-4" id="hotels-listing-container">
+                    <!-- Dynamic Hotel Cards & Native Ads rendered via renderHotels() -->
+                </div>
+            </div>
+
+            <!-- Weather Delay Simulator Note -->
+            <div class="sarv-card p-4 rounded-2xl bg-amber-50 border border-amber-300 space-y-2 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-bolt text-warmOrange-600"></i>
+                        <span class="font-black text-xs text-navy-900">Multi-Day Trip Weather Monitor</span>
+                    </div>
+                    <button type="button" onclick="toggleDelaySimulation()" id="btn-delay-sim" class="px-2.5 py-1 rounded-lg bg-navy-900 text-white font-black text-[10px]">
+                        Simulate Behind-Schedule (+2h)
+                    </button>
+                </div>
+                <div id="weather-delay-alert" class="hidden p-3 rounded-xl bg-amber-100 text-amber-950 text-xs font-bold flex items-start gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5"></i>
+                    <div>
+                        <span>Behind schedule warning (+2 Hours detected): Evening mountain fog & light rain shower forecasted along high pass. Drive cautiously with fog lamps on.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Bar: Back to Sightseeing & Proceed to Escrow Checkout -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button type="button" onclick="goBack()" class="px-6 py-3.5 rounded-2xl border-2 border-slate-300 bg-white hover:bg-slate-100 text-navy-900 font-black text-sm flex items-center justify-center gap-2 shadow-sm transition-all sm:w-auto">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back to Sightseeing</span>
+                </button>
+                <button type="button" onclick="switchPage('navigation-view')" class="px-5 py-3.5 rounded-2xl border-2 border-navy-800 bg-navy-900 hover:bg-navy-800 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all sm:w-auto">
+                    <i class="fa-solid fa-map-location-dot text-amber-400"></i><span>Preview Map</span>
+                </button>
+                <button type="button" onclick="switchPage('payment')" class="btn-warm flex-1 py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>Proceed to Escrow Checkout</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- PAGE 6: PAYMENT & SECURE CHECKOUT -->
+        <!-- ======================================================== -->
+        <section id="view-payment" class="app-page space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-black tracking-widest text-warmOrange-600 uppercase">Step 5 of 5 • Secure Payment</span>
+                    <h2 class="text-2xl font-black text-navy-900">Payment & Checkout</h2>
+                </div>
+                <button type="button" onclick="goBack()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy-900 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm border border-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                </button>
+            </div>
+
+            <!-- Booking Confirmation Summary Card -->
+            <div class="p-5 rounded-2xl bg-gradient-to-br from-navy-900 via-navy-950 to-slate-900 text-white space-y-4 shadow-xl border border-navy-800 relative overflow-hidden">
+                <!-- Decorative glow -->
+                <div class="absolute -top-20 -right-20 w-60 h-60 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-16 -left-16 w-48 h-48 bg-warmOrange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="flex items-center gap-2 relative z-10">
+                    <span class="w-8 h-8 rounded-xl bg-amber-400 text-navy-950 font-black text-sm flex items-center justify-center">
+                        <i class="fa-solid fa-receipt"></i>
+                    </span>
+                    <div>
+                        <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">Booking Summary</span>
+                        <h4 class="text-sm font-black text-white">Your Trip Reservation</h4>
+                    </div>
+                </div>
+
+                <!-- Trip Details Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 relative z-10">
+                    <!-- Route Info -->
+                    <div class="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 space-y-1.5">
+                        <span class="text-[10px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1">
+                            <i class="fa-solid fa-route"></i> Route
+                        </span>
+                        <span id="pay-route-name" class="text-xs font-black text-white block">Scenic Foothills Corridor</span>
+                        <span id="pay-route-meta" class="text-[11px] text-slate-300 block">Delhi → Manali • 536 km • 10h 30m</span>
+                    </div>
+                    <!-- Hotel Info -->
+                    <div class="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 space-y-1.5">
+                        <span class="text-[10px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1">
+                            <i class="fa-solid fa-hotel"></i> Accommodation
+                        </span>
+                        <span id="pay-hotel-name" class="text-xs font-black text-white block">Grand Alpine Cedar Sanctuary</span>
+                        <span id="pay-hotel-room" class="text-[11px] text-slate-300 block">Deluxe Cedar Balcony Suite</span>
+                    </div>
+                    <!-- Stay Schedule -->
+                    <div class="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 space-y-1.5">
+                        <span class="text-[10px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1">
+                            <i class="fa-solid fa-calendar-days"></i> Stay Schedule
+                        </span>
+                        <span id="pay-checkin-date" class="text-xs font-black text-white block">Check-in: 12 Sep 2026</span>
+                        <span id="pay-checkout-date" class="text-[11px] text-slate-300 block">Check-out: 15 Sep 2026 • 3 Nights</span>
+                    </div>
+                    <!-- Travelers & Places -->
+                    <div class="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 space-y-1.5">
+                        <span class="text-[10px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1">
+                            <i class="fa-solid fa-user-group"></i> Travelers & Sightseeing
+                        </span>
+                        <span id="pay-travelers" class="text-xs font-black text-white block">2 Travelers</span>
+                        <span id="pay-places-count" class="text-[11px] text-slate-300 block">4 Places in Itinerary</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Escrow Payment Breakdown -->
+            <div class="sarv-card p-5 rounded-2xl space-y-4 border border-slate-300 shadow-md">
+                <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-warmOrange-500 text-white font-black text-xs flex items-center justify-center">
+                        <i class="fa-solid fa-calculator"></i>
+                    </span>
+                    <h3 class="text-sm font-black text-navy-900 uppercase tracking-wider">Price Breakdown</h3>
+                </div>
+
+                <div class="space-y-2.5 text-xs">
+                    <div class="flex items-center justify-between py-2 border-b border-slate-200">
+                        <span class="font-bold text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-bed text-slate-400"></i>
+                            Room Tariff (<span id="pay-room-nights">3</span> Nights × <span id="pay-per-night">₹3,499</span>)
+                        </span>
+                        <span id="pay-total-stay" class="font-black text-navy-900">₹10,497</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-slate-200">
+                        <span class="font-bold text-slate-700 flex items-center gap-2">
+                            <i id="pay-transport-icon" class="fa-solid fa-gas-pump text-slate-400"></i>
+                            <span id="pay-transport-title">Estimated Fuel & Tolls</span>
+                        </span>
+                        <span id="pay-fuel-cost" class="font-black text-navy-900">₹4,200</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b border-slate-200">
+                        <span class="font-bold text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-map-pin text-slate-400"></i>
+                            Places & Entry Fees (Est.)
+                        </span>
+                        <span id="pay-places-fees" class="font-black text-navy-900">₹1,600</span>
+                    </div>
+
+                    <!-- Promo Code -->
+                    <div class="flex items-center gap-2 py-2 border-b border-slate-200">
+                        <div class="flex-1 flex items-center gap-2 p-2 rounded-xl border border-slate-300 bg-slate-50">
+                            <i class="fa-solid fa-tag text-warmOrange-500 text-xs"></i>
+                            <input type="text" id="pay-promo-input" placeholder="Enter promo code..." class="flex-1 text-xs font-bold text-navy-900 bg-transparent outline-none">
+                        </div>
+                        <button type="button" onclick="applyPromoCode()" class="px-4 py-2 rounded-xl bg-navy-900 text-white font-black text-[11px] hover:bg-navy-800 transition-colors shrink-0">
+                            Apply
+                        </button>
+                    </div>
+                    <div id="pay-promo-status" class="hidden p-2.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle text-emerald-500"></i>
+                        <span id="pay-promo-text">Promo applied!</span>
+                    </div>
+
+                    <div class="flex items-center justify-between py-2 border-b border-dashed border-slate-300">
+                        <span class="font-bold text-slate-500">Discount</span>
+                        <span id="pay-discount" class="font-black text-emerald-600">-₹0</span>
+                    </div>
+
+                    <!-- Grand Total -->
+                    <div class="flex items-center justify-between py-3 bg-slate-50 -mx-2 px-4 rounded-xl">
+                        <span class="text-sm font-black text-navy-900">Grand Total</span>
+                        <span id="pay-grand-total" class="text-lg font-black text-navy-900">₹16,297</span>
+                    </div>
+
+                    <!-- Budget Comparison Visual Bar -->
+                    <div id="pay-budget-comparison-box" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                        <div class="flex items-center justify-between text-xs font-bold">
+                            <span class="text-slate-600 flex items-center gap-1.5">
+                                <i class="fa-solid fa-wallet text-warmOrange-500"></i>
+                                <span>Planned Trip Budget:</span>
+                                <span id="pay-planned-budget" class="font-black text-navy-900">₹16,000</span>
+                            </span>
+                            <span id="pay-budget-status-pill" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Within Budget</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                            <span>Trip Grand Total: <span id="pay-comparison-total" class="font-bold text-navy-900">₹16,000</span></span>
+                            <span id="pay-budget-diff-label" class="font-bold text-emerald-700">Exact Budget Match</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Escrow Split Visual -->
+                <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-warmOrange-600 text-base"></i>
+                        <span class="text-xs font-black text-navy-900">Sarvyatri Escrow Payment Split</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-3 rounded-xl bg-warmOrange-100 border border-warmOrange-300 text-center">
+                            <span class="text-[10px] font-black text-warmOrange-700 uppercase block">Pay Now (20%)</span>
+                            <span id="pay-escrow-now" class="text-xl font-black text-warmOrange-600 block mt-1">₹2,099</span>
+                            <span class="text-[10px] text-warmOrange-700 font-semibold">Held in Secure Escrow</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white border border-amber-200 text-center">
+                            <span class="text-[10px] font-black text-slate-600 uppercase block">After Checkout (80%)</span>
+                            <span id="pay-escrow-later" class="text-xl font-black text-slate-700 block mt-1">₹8,398</span>
+                            <span class="text-[10px] text-slate-500 font-semibold">Released Post Verification</span>
+                        </div>
+                    </div>
+                    <!-- Escrow Progress Bar -->
+                    <div class="space-y-1">
+                        <div class="w-full h-3 rounded-full bg-slate-200 overflow-hidden relative">
+                            <div class="h-full rounded-full bg-gradient-to-r from-warmOrange-500 to-amber-400 transition-all duration-700" style="width: 20%"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-bold">
+                            <span class="text-warmOrange-600">20% Escrow Now</span>
+                            <span class="text-slate-500">80% Post-Checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Method Selection -->
+            <div class="sarv-card p-5 rounded-2xl space-y-4 border border-slate-300 shadow-md">
+                <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-navy-900 text-white font-black text-xs flex items-center justify-center">
+                        <i class="fa-solid fa-credit-card"></i>
+                    </span>
+                    <h3 class="text-sm font-black text-navy-900 uppercase tracking-wider">Select Payment Method</h3>
+                </div>
+
+                <!-- Payment Method Tabs -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="payment-method-tabs">
+                    <button type="button" onclick="selectPaymentMethod('upi')" data-method="upi" class="pay-method-tab active p-3 rounded-xl border-2 border-warmOrange-500 bg-amber-50 flex flex-col items-center gap-1.5 transition-all shadow-sm">
+                        <i class="fa-solid fa-mobile-screen text-lg text-warmOrange-600"></i>
+                        <span class="text-[11px] font-black text-navy-900">UPI</span>
+                        <span class="text-[9px] font-semibold text-slate-500">GPay / PhonePe</span>
+                    </button>
+                    <button type="button" onclick="selectPaymentMethod('card')" data-method="card" class="pay-method-tab p-3 rounded-xl border-2 border-slate-200 bg-white flex flex-col items-center gap-1.5 hover:border-slate-300 transition-all">
+                        <i class="fa-solid fa-credit-card text-lg text-slate-600"></i>
+                        <span class="text-[11px] font-black text-navy-900">Card</span>
+                        <span class="text-[9px] font-semibold text-slate-500">Debit / Credit</span>
+                    </button>
+                    <button type="button" onclick="selectPaymentMethod('netbanking')" data-method="netbanking" class="pay-method-tab p-3 rounded-xl border-2 border-slate-200 bg-white flex flex-col items-center gap-1.5 hover:border-slate-300 transition-all">
+                        <i class="fa-solid fa-building-columns text-lg text-slate-600"></i>
+                        <span class="text-[11px] font-black text-navy-900">Net Banking</span>
+                        <span class="text-[9px] font-semibold text-slate-500">All Banks</span>
+                    </button>
+                    <button type="button" onclick="selectPaymentMethod('wallet')" data-method="wallet" class="pay-method-tab p-3 rounded-xl border-2 border-slate-200 bg-white flex flex-col items-center gap-1.5 hover:border-slate-300 transition-all">
+                        <i class="fa-solid fa-wallet text-lg text-slate-600"></i>
+                        <span class="text-[11px] font-black text-navy-900">Wallet</span>
+                        <span class="text-[9px] font-semibold text-slate-500">Paytm / Amazon</span>
+                    </button>
+                </div>
+
+                <!-- UPI Form -->
+                <div id="pay-form-upi" class="pay-form-panel space-y-3">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                        <label class="text-[11px] font-black text-navy-900 uppercase tracking-wider block">Enter UPI ID</label>
+                        <div class="flex gap-2">
+                            <div class="flex-1 p-2.5 rounded-xl border border-slate-300 bg-white flex items-center">
+                                <i class="fa-solid fa-at text-slate-400 mr-2 text-xs"></i>
+                                <input type="text" id="pay-upi-id" placeholder="yourname@upi / 9876543210@ybl" class="w-full text-xs font-bold text-navy-900 outline-none bg-transparent">
+                            </div>
+                            <button type="button" onclick="verifyUpiId()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-black text-[11px] hover:bg-emerald-700 transition-colors shrink-0">
+                                Verify
+                            </button>
+                        </div>
+                        <div id="pay-upi-status" class="hidden text-[11px] font-bold flex items-center gap-1.5"></div>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><i class="fa-brands fa-google-pay text-lg text-slate-600"></i></span>
+                        <span class="flex items-center gap-1"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/PhonePe_Logo.svg/120px-PhonePe_Logo.svg.png" class="h-4 opacity-60" alt="PhonePe"></span>
+                        <span class="text-[10px] text-slate-400">& all UPI apps supported</span>
+                    </div>
+                </div>
+
+                <!-- Card Form -->
+                <div id="pay-form-card" class="pay-form-panel hidden space-y-3">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-black text-slate-600 uppercase tracking-wider block">Card Number</label>
+                            <div class="p-2.5 rounded-xl border border-slate-300 bg-white flex items-center">
+                                <i class="fa-regular fa-credit-card text-slate-400 mr-2 text-xs"></i>
+                                <input type="text" id="pay-card-number" maxlength="19" placeholder="1234 5678 9012 3456" oninput="formatCardNumber(this)" class="w-full text-xs font-bold text-navy-900 outline-none bg-transparent tracking-wider">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] font-black text-slate-600 uppercase tracking-wider block">Expiry</label>
+                                <div class="p-2.5 rounded-xl border border-slate-300 bg-white flex items-center">
+                                    <input type="text" id="pay-card-expiry" maxlength="5" placeholder="MM/YY" oninput="formatCardExpiry(this)" class="w-full text-xs font-bold text-navy-900 outline-none bg-transparent">
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] font-black text-slate-600 uppercase tracking-wider block">CVV</label>
+                                <div class="p-2.5 rounded-xl border border-slate-300 bg-white flex items-center">
+                                    <i class="fa-solid fa-lock text-slate-400 mr-2 text-[10px]"></i>
+                                    <input type="password" id="pay-card-cvv" maxlength="4" placeholder="•••" class="w-full text-xs font-bold text-navy-900 outline-none bg-transparent tracking-widest">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-black text-slate-600 uppercase tracking-wider block">Name on Card</label>
+                            <div class="p-2.5 rounded-xl border border-slate-300 bg-white flex items-center">
+                                <i class="fa-solid fa-user text-slate-400 mr-2 text-[10px]"></i>
+                                <input type="text" id="pay-card-name" placeholder="RAHUL SHARMA" class="w-full text-xs font-bold text-navy-900 outline-none bg-transparent uppercase">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 text-[10px] text-slate-500 font-medium">
+                        <i class="fa-brands fa-cc-visa text-2xl text-slate-400"></i>
+                        <i class="fa-brands fa-cc-mastercard text-2xl text-slate-400"></i>
+                        <i class="fa-brands fa-cc-amex text-2xl text-slate-400"></i>
+                        <span class="text-slate-400 ml-1">RuPay & More</span>
+                    </div>
+                </div>
+
+                <!-- Net Banking Form -->
+                <div id="pay-form-netbanking" class="pay-form-panel hidden space-y-3">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                        <label class="text-[10px] font-black text-slate-600 uppercase tracking-wider block">Select Your Bank</label>
+                        <div class="grid grid-cols-2 gap-2" id="netbanking-options">
+                            <button type="button" onclick="selectBank(this, 'SBI')" class="bank-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-building-columns text-blue-600"></i> State Bank of India
+                            </button>
+                            <button type="button" onclick="selectBank(this, 'HDFC')" class="bank-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-building-columns text-red-600"></i> HDFC Bank
+                            </button>
+                            <button type="button" onclick="selectBank(this, 'ICICI')" class="bank-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-building-columns text-orange-600"></i> ICICI Bank
+                            </button>
+                            <button type="button" onclick="selectBank(this, 'Axis')" class="bank-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-building-columns text-purple-600"></i> Axis Bank
+                            </button>
+                            <button type="button" onclick="selectBank(this, 'Kotak')" class="bank-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-building-columns text-red-700"></i> Kotak Mahindra
+                            </button>
+                            <button type="button" onclick="selectBank(this, 'PNB')" class="bank-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-building-columns text-amber-700"></i> Punjab National Bank
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wallet Form -->
+                <div id="pay-form-wallet" class="pay-form-panel hidden space-y-3">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                        <label class="text-[10px] font-black text-slate-600 uppercase tracking-wider block">Select Wallet</label>
+                        <div class="grid grid-cols-2 gap-2" id="wallet-options">
+                            <button type="button" onclick="selectWallet(this, 'Paytm')" class="wallet-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-wallet text-blue-500"></i> Paytm
+                            </button>
+                            <button type="button" onclick="selectWallet(this, 'Amazon Pay')" class="wallet-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-brands fa-amazon text-amber-600"></i> Amazon Pay
+                            </button>
+                            <button type="button" onclick="selectWallet(this, 'Freecharge')" class="wallet-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-bolt text-green-600"></i> Freecharge
+                            </button>
+                            <button type="button" onclick="selectWallet(this, 'Mobikwik')" class="wallet-option p-3 rounded-xl border-2 border-slate-200 bg-white hover:border-navy-400 text-xs font-bold text-navy-900 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-wallet text-indigo-600"></i> Mobikwik
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Trust Badges -->
+            <div class="grid grid-cols-3 gap-2">
+                <div class="sarv-card p-3 rounded-xl border border-slate-200 text-center space-y-1 shadow-sm">
+                    <i class="fa-solid fa-shield-halved text-emerald-500 text-xl"></i>
+                    <span class="text-[10px] font-black text-navy-900 block">256-bit SSL</span>
+                    <span class="text-[9px] text-slate-500 font-semibold">Encrypted</span>
+                </div>
+                <div class="sarv-card p-3 rounded-xl border border-slate-200 text-center space-y-1 shadow-sm">
+                    <i class="fa-solid fa-lock text-warmOrange-500 text-xl"></i>
+                    <span class="text-[10px] font-black text-navy-900 block">Escrow Protected</span>
+                    <span class="text-[9px] text-slate-500 font-semibold">100% Safe</span>
+                </div>
+                <div class="sarv-card p-3 rounded-xl border border-slate-200 text-center space-y-1 shadow-sm">
+                    <i class="fa-solid fa-rotate-left text-navy-500 text-xl"></i>
+                    <span class="text-[10px] font-black text-navy-900 block">Free Cancellation</span>
+                    <span class="text-[9px] text-slate-500 font-semibold">Within 24hrs</span>
+                </div>
+            </div>
+
+            <!-- Terms & Consent -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                <label class="flex items-start gap-2.5 cursor-pointer">
+                    <input type="checkbox" id="pay-terms-check" class="mt-0.5 accent-warmOrange-500" checked>
+                    <span class="text-[11px] text-slate-700 font-medium leading-relaxed">
+                        I agree to Sarvyatri's <a href="#" class="text-warmOrange-600 font-bold underline">Terms & Conditions</a>,
+                        <a href="#" class="text-warmOrange-600 font-bold underline">Refund Policy</a>, and
+                        <a href="#" class="text-warmOrange-600 font-bold underline">Escrow Agreement</a>.
+                        I authorize payment of the 20% advance security deposit.
+                    </span>
+                </label>
+            </div>
+
+            <!-- Pay Button -->
+            <button type="button" id="btn-pay-now" onclick="processPayment()" class="btn-warm w-full py-4.5 rounded-2xl font-black text-sm shadow-2xl flex items-center justify-center gap-2.5 relative overflow-hidden group">
+                <span class="absolute inset-0 bg-gradient-to-r from-warmOrange-600 via-amber-500 to-warmOrange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <i class="fa-solid fa-lock relative z-10"></i>
+                <span id="btn-pay-text" class="relative z-10">Pay ₹2,099 Securely</span>
+                <i class="fa-solid fa-arrow-right relative z-10"></i>
+            </button>
+
+            <!-- Bottom Note -->
+            <p class="text-center text-[10px] text-slate-500 font-medium">
+                <i class="fa-solid fa-info-circle mr-0.5"></i>
+                Your remaining balance of <span id="pay-bottom-balance">₹8,398</span> will be charged post-checkout after verified stay.
+            </p>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- INTEGRATED NAVIGATION & MAP VIEW -->
+        <!-- ======================================================== -->
+        <section id="view-navigation-view" class="app-page space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-black tracking-widest text-warmOrange-600 uppercase">Live Route Architecture</span>
+                    <h2 class="text-2xl font-black text-navy-900">Integrated Route Navigation</h2>
+                </div>
+                <button type="button" onclick="goBack()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy-900 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm border border-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                </button>
+            </div>
+
+            <!-- Route Metrics Dashboard (NO HIGHWAY NAMES, VISUAL PATH ONLY) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="sarv-card p-3.5 rounded-2xl text-center border border-slate-300 shadow-sm">
+                    <span class="text-[10px] font-extrabold text-slate-500 uppercase block">Total Distance</span>
+                    <span id="nav-stat-distance" class="text-lg font-black text-navy-900">536 km</span>
+                </div>
+                <div class="sarv-card p-3.5 rounded-2xl text-center border border-slate-300 shadow-sm">
+                    <span class="text-[10px] font-extrabold text-slate-500 uppercase block">Estimated Time</span>
+                    <span id="nav-stat-time" class="text-lg font-black text-warmOrange-600">10h 30m</span>
+                </div>
+                <div class="sarv-card p-3.5 rounded-2xl text-center border border-slate-300 shadow-sm">
+                    <span class="text-[10px] font-extrabold text-slate-500 uppercase block">Estimated Total Cost</span>
+                    <span id="nav-stat-cost" class="text-lg font-black text-navy-900">₹4,200</span>
+                </div>
+                <div class="sarv-card p-3.5 rounded-2xl text-center border border-slate-300 shadow-sm">
+                    <span class="text-[10px] font-extrabold text-slate-500 uppercase block">Path Stops</span>
+                    <span id="nav-stat-stops" class="text-lg font-black text-emerald-600">2 Waypoints</span>
+                </div>
+            </div>
+
+            <!-- Integrated Visual Navigation Map -->
+            <div class="sarv-card rounded-3xl overflow-hidden shadow-xl border border-slate-300">
+                <div class="p-4 bg-navy-900 text-white flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span class="font-black text-xs uppercase tracking-wider">Live Path & Stops Waypoints</span>
+                    </div>
+                    <span class="text-[11px] font-bold text-amber-300">Visual Waypoint Map</span>
+                </div>
+
+                <div class="relative h-80 sm:h-96 bg-slate-900 overflow-hidden flex items-center justify-center">
+                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&auto=format&fit=crop" alt="Live Interactive Route Navigation Map" class="w-full h-full object-cover opacity-60">
+                    
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 800 400" fill="none">
+                        <path d="M100 350 Q 250 280 350 200 T 520 120 T 700 60" stroke="#F59E0B" stroke-width="6" stroke-linecap="round" stroke-dasharray="10 6" class="animate-pulse" />
+                        <circle cx="100" cy="350" r="12" fill="#E67E22" stroke="#FFFFFF" stroke-width="3" />
+                        <circle cx="350" cy="200" r="9" fill="#255BA5" stroke="#FFFFFF" stroke-width="2.5" />
+                        <circle cx="520" cy="120" r="9" fill="#255BA5" stroke="#FFFFFF" stroke-width="2.5" />
+                        <circle cx="700" cy="60" r="14" fill="#10B981" stroke="#FFFFFF" stroke-width="3.5" />
+                    </svg>
+
+                    <!-- Interactive Waypoint Pins (Bug 6 Fix) -->
+                    <button type="button" onclick="showMapWaypointDetails(0)" id="waypoint-pin-0" class="map-waypoint-btn absolute bottom-6 left-6 px-3 py-2 rounded-xl bg-navy-900/90 hover:bg-navy-900 backdrop-blur-md text-white text-xs font-black border-2 border-warmOrange-500 shadow-xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer z-10" title="Click to view Origin details">
+                        <span class="w-2.5 h-2.5 rounded-full bg-warmOrange-500 animate-ping"></span>
+                        <span><i class="fa-solid fa-location-dot text-warmOrange-400 mr-1"></i>Origin: Delhi</span>
+                    </button>
+                    <button type="button" onclick="showMapWaypointDetails(1)" id="waypoint-pin-1" class="map-waypoint-btn absolute top-1/2 left-1/3 px-3 py-1.5 rounded-xl bg-navy-900/85 hover:bg-navy-900 backdrop-blur-sm text-amber-300 text-xs font-extrabold border border-amber-400/50 shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer z-10" title="Click to view Stop 1 details">
+                        <i class="fa-solid fa-utensils text-amber-400"></i>
+                        <span>Stop 1: Chandigarh</span>
+                    </button>
+                    <button type="button" onclick="showMapWaypointDetails(2)" id="waypoint-pin-2" class="map-waypoint-btn absolute top-1/4 right-1/3 px-3 py-1.5 rounded-xl bg-navy-900/85 hover:bg-navy-900 backdrop-blur-sm text-amber-300 text-xs font-extrabold border border-amber-400/50 shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer z-10" title="Click to view Stop 2 details">
+                        <i class="fa-solid fa-charging-station text-amber-400"></i>
+                        <span>Stop 2: Bilaspur</span>
+                    </button>
+                    <button type="button" onclick="showMapWaypointDetails(3)" id="waypoint-pin-3" class="map-waypoint-btn absolute top-6 right-6 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow-xl border-2 border-white/80 flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer z-10" title="Click to view Destination details">
+                        <i class="fa-solid fa-flag-checkered text-white"></i>
+                        <span>Destination: Manali</span>
+                    </button>
+                </div>
+
+                <!-- Interactive Waypoint Stop Details Card (Bug 6 Fix) -->
+                <div id="nav-waypoint-info-card" class="p-4 sm:p-5 bg-gradient-to-r from-navy-900 via-navy-800 to-slate-900 text-white border-t border-slate-700 transition-all">
+                    <!-- Populated dynamically by showMapWaypointDetails(idx) -->
+                </div>
+
+                <div class="p-4 bg-white flex items-center justify-between border-t border-slate-200">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-navy-900 text-white flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-diamond-turn-right text-warmOrange-400"></i>
+                        </div>
+                        <div>
+                            <span class="font-black text-xs text-navy-900 block">Next Navigation Point: Murthal Comfort Stop</span>
+                            <span class="text-[11px] text-slate-600 font-semibold">Distance: 44 km ahead • Estimated arrival in 42 mins</span>
+                        </div>
+                    </div>
+                    <button type="button" onclick="goBack()" class="btn-warm px-4 py-2.5 rounded-xl text-xs font-black flex items-center gap-2 shadow-md">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back to Previous Step</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Bar: Back to Previous Step & Return Home -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button type="button" onclick="goBack()" class="px-6 py-3.5 rounded-2xl border-2 border-slate-300 bg-white hover:bg-slate-100 text-navy-900 font-black text-sm flex items-center justify-center gap-2 shadow-sm transition-all sm:w-auto">
+                    <i class="fa-solid fa-arrow-left"></i><span>Back to Previous Step</span>
+                </button>
+                <button type="button" onclick="switchPage('home')" class="btn-navy flex-1 py-3.5 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-md">
+                    <i class="fa-solid fa-house"></i><span>Return to Home Dashboard</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW: FUEL & EV CHARGER FINDER (Bug 3 Fix) -->
+        <!-- ======================================================== -->
+        <section id="view-fuel-finder" class="app-page space-y-6">
+            <!-- Header & Navigation -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-navy-900 via-navy-800 to-slate-900 p-6 rounded-3xl text-white shadow-xl">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full bg-warmOrange-500/20 text-warmOrange-400 text-xs font-black uppercase tracking-wider border border-warmOrange-500/30">
+                            Live Route Scanner
+                        </span>
+                        <span class="text-xs text-slate-400">• Highway NH-44 Corridor</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Highway Fuel & EV Station Finder</h2>
+                    <p class="text-xs sm:text-sm text-slate-300 font-medium">Verified petrol pumps, high-pressure CNG stations & DC fast chargers along your path</p>
+                </div>
+                <div class="flex items-center gap-2 self-start sm:self-center">
+                    <button type="button" onclick="goBack()" class="px-4 py-2.5 rounded-xl border border-slate-600 bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                    </button>
+                    <button type="button" onclick="switchPage('home')" class="btn-warm px-4 py-2.5 rounded-xl font-black text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-house"></i><span>Home</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Chips & Search Bar -->
+            <div class="sarv-card p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0" id="fuel-filter-chips">
+                    <button type="button" onclick="filterFuelStations('all')" class="fuel-chip active px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-navy-900 text-white border-navy-900" data-filter="all">
+                        <i class="fa-solid fa-layer-group mr-1.5"></i>All Outlets (6)
+                    </button>
+                    <button type="button" onclick="filterFuelStations('petrol')" class="fuel-chip px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-filter="petrol">
+                        <i class="fa-solid fa-gas-pump mr-1.5 text-amber-500"></i>Petrol / Diesel
+                    </button>
+                    <button type="button" onclick="filterFuelStations('cng')" class="fuel-chip px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-filter="cng">
+                        <i class="fa-solid fa-leaf mr-1.5 text-emerald-500"></i>Green CNG
+                    </button>
+                    <button type="button" onclick="filterFuelStations('ev')" class="fuel-chip px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-filter="ev">
+                        <i class="fa-solid fa-bolt mr-1.5 text-cyan-500"></i>EV Fast Charge (CCS2)
+                    </button>
+                </div>
+                <div class="relative min-w-[240px]">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="fuel-search-input" oninput="onFuelSearchInput(this.value)" placeholder="Search station, brand, city..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs font-bold text-navy-900 outline-none focus:border-warmOrange-500 focus:ring-2 focus:ring-warmOrange-500/20">
+                </div>
+            </div>
+
+            <!-- Main Interactive Fuel Layout: Map + Station List -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Visual Highway Map Column -->
+                <div class="lg:col-span-6 space-y-4">
+                    <div class="sarv-card rounded-3xl overflow-hidden border border-slate-200 shadow-md bg-navy-950 text-white relative">
+                        <div class="p-4 bg-navy-900/90 border-b border-navy-800 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                <span class="text-xs font-black uppercase tracking-wider text-slate-200">Interactive Highway Corridor</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-warmOrange-400"><i class="fa-solid fa-route mr-1"></i>Delhi → Karnal → Ambala</span>
+                        </div>
+
+                        <!-- Static Visual Map with Hotspot Markers -->
+                        <div class="relative h-80 sm:h-96 overflow-hidden bg-slate-900 flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1000&auto=format&fit=crop" class="w-full h-full object-cover opacity-50" alt="Map Route">
+                            
+                            <!-- Vector Route Line -->
+                            <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 600 360" fill="none">
+                                <path d="M50 320 Q 200 260 300 180 T 520 50" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 6" />
+                            </svg>
+
+                            <!-- Interactive Map Fuel Pump Markers -->
+                            <div id="fuel-map-markers-layer" class="absolute inset-0">
+                                <!-- Populated dynamically by renderFuelMapMarkers() -->
+                            </div>
+                        </div>
+
+                        <!-- Active Highlight Details Bar -->
+                        <div id="fuel-map-selected-bar" class="p-4 bg-navy-900 border-t border-navy-800 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-warmOrange-500/20 text-warmOrange-400 flex items-center justify-center font-black">
+                                    <i class="fa-solid fa-gas-pump"></i>
+                                </div>
+                                <div>
+                                    <h4 id="fuel-map-selected-name" class="text-xs font-black text-white">IndianOil Swagat Highway Hub - Murthal</h4>
+                                    <p id="fuel-map-selected-meta" class="text-[11px] text-slate-400">44 km away • Petrol ₹96.72 • Speed Diesel ₹89.62 • EV 60kW</p>
+                                </div>
+                            </div>
+                            <button type="button" onclick="showToast('Navigating to Murthal Station on GPS...', 'fa-diamond-turn-right')" class="btn-warm px-3.5 py-1.5 rounded-xl text-xs font-black shadow-md flex items-center gap-1.5 shrink-0">
+                                <i class="fa-solid fa-location-arrow"></i><span>GPS Direct</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Price Advisory Card -->
+                    <div class="sarv-card p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info text-warmOrange-500"></i>
+                            <span class="font-bold text-navy-900">Live Highway Fuel Rates:</span>
+                        </div>
+                        <div class="flex items-center gap-3 font-black text-slate-700">
+                            <span class="text-amber-600">Petrol: ₹96.72</span>
+                            <span class="text-blue-600">Diesel: ₹89.62</span>
+                            <span class="text-emerald-600">CNG: ₹75.59</span>
+                            <span class="text-cyan-600">EV: ₹18/kWh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Station Cards List Column -->
+                <div class="lg:col-span-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-black text-navy-900 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-warmOrange-500"></i>
+                            <span>Verified Stations En Route</span>
+                            <span id="fuel-stations-count-badge" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-black">6 Results</span>
+                        </h3>
+                        <span class="text-xs text-slate-500 font-semibold">Sorted by route proximity</span>
+                    </div>
+
+                    <div id="fuel-stations-list-container" class="space-y-3 max-h-[620px] overflow-y-auto pr-1">
+                        <!-- Populated by renderFuelStationsList() -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW: RESTAURANTS & HIGHWAY DHABAS (Bug 4 Fix) -->
+        <!-- ======================================================== -->
+        <section id="view-restaurants" class="app-page space-y-6">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-navy-900 via-navy-800 to-slate-900 p-6 rounded-3xl text-white shadow-xl">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full bg-warmOrange-500/20 text-warmOrange-400 text-xs font-black uppercase tracking-wider border border-warmOrange-500/30">
+                            Culinary Pitstops
+                        </span>
+                        <span class="text-xs text-slate-400">• Sanitised Restrooms & Safe Parking</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Highway Dining & Authentic Dhabas</h2>
+                    <p class="text-xs sm:text-sm text-slate-300 font-medium">Top-rated highway eateries, Punjabi dhabas, South Indian tiffin & 24/7 family dining</p>
+                </div>
+                <div class="flex items-center gap-2 self-start sm:self-center">
+                    <button type="button" onclick="goBack()" class="px-4 py-2.5 rounded-xl border border-slate-600 bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                    </button>
+                    <button type="button" onclick="switchPage('home')" class="btn-warm px-4 py-2.5 rounded-xl font-black text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-house"></i><span>Home</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cuisine Filter Tabs & Search Bar -->
+            <div class="sarv-card p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0" id="restaurant-cuisine-tabs">
+                    <button type="button" onclick="setRestaurantCuisine('all')" class="restaurant-tab active px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-navy-900 text-white border-navy-900" data-cuisine="all">
+                        All Outlets
+                    </button>
+                    <button type="button" onclick="setRestaurantCuisine('dhaba')" class="restaurant-tab px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-cuisine="dhaba">
+                        <i class="fa-solid fa-fire mr-1 text-warmOrange-500"></i>Punjabi Dhaba
+                    </button>
+                    <button type="button" onclick="setRestaurantCuisine('pure-veg')" class="restaurant-tab px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-cuisine="pure-veg">
+                        <i class="fa-solid fa-leaf mr-1 text-emerald-500"></i>Pure Vegetarian
+                    </button>
+                    <button type="button" onclick="setRestaurantCuisine('south-indian')" class="restaurant-tab px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-cuisine="south-indian">
+                        South Indian Express
+                    </button>
+                    <button type="button" onclick="setRestaurantCuisine('fast-food')" class="restaurant-tab px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer shrink-0 bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-cuisine="fast-food">
+                        Cafes & Quick Bites
+                    </button>
+                </div>
+                <div class="relative min-w-[260px]">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="restaurant-search-input" oninput="onRestaurantSearchInput(this.value)" placeholder="Search dishes, dhabas, or location..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs font-bold text-navy-900 outline-none focus:border-warmOrange-500 focus:ring-2 focus:ring-warmOrange-500/20">
+                </div>
+            </div>
+
+            <!-- Restaurant Grid -->
+            <div id="restaurants-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Populated by renderRestaurantsList() -->
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- VIEW: DEDICATED TAXI & OUTSTATION CAB BOOKING (Bug 7 Fix) -->
+        <!-- ======================================================== -->
+        <section id="view-taxi-booking" class="app-page space-y-6">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-navy-900 via-navy-800 to-slate-900 p-6 rounded-3xl text-white shadow-xl">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full bg-warmOrange-500/20 text-warmOrange-400 text-xs font-black uppercase tracking-wider border border-warmOrange-500/30">
+                            Instant Cab Dispatch
+                        </span>
+                        <span class="text-xs text-slate-400">• Verified Chauffeurs & Zero Surge</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight">On-Demand Outstation & City Cabs</h2>
+                    <p class="text-xs sm:text-sm text-slate-300 font-medium">Book private chauffeured AC sedans, family SUVs, or luxury MPVs with clear toll pricing</p>
+                </div>
+                <div class="flex items-center gap-2 self-start sm:self-center">
+                    <button type="button" onclick="goBack()" class="px-4 py-2.5 rounded-xl border border-slate-600 bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+                    </button>
+                    <button type="button" onclick="switchPage('home')" class="btn-warm px-4 py-2.5 rounded-xl font-black text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-house"></i><span>Home</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Booking Inputs Bar -->
+            <div class="sarv-card p-5 rounded-3xl bg-white border border-slate-200 shadow-md space-y-4">
+                <!-- Trip Type Tabs -->
+                <div class="flex items-center gap-2 border-b border-slate-200 pb-3" id="taxi-trip-type-tabs">
+                    <button type="button" onclick="setTaxiTripType('one-way')" class="taxi-tab active px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer bg-navy-900 text-white border-navy-900" data-type="one-way">
+                        <i class="fa-solid fa-arrow-right mr-1.5"></i>One-Way Outstation
+                    </button>
+                    <button type="button" onclick="setTaxiTripType('round-trip')" class="taxi-tab px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-type="round-trip">
+                        <i class="fa-solid fa-arrows-rotate mr-1.5"></i>Round Trip (Halt Included)
+                    </button>
+                    <button type="button" onclick="setTaxiTripType('hourly')" class="taxi-tab px-4 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-300" data-type="hourly">
+                        <i class="fa-solid fa-clock mr-1.5"></i>Local Hourly Rental (8h / 80km)
+                    </button>
+                </div>
+
+                <!-- Pickup / Drop / Date / Pax Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div class="p-3 rounded-2xl border border-slate-300 bg-slate-50 focus-within:border-warmOrange-500 focus-within:bg-white transition-all">
+                        <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">
+                            <i class="fa-solid fa-circle-dot text-emerald-500 mr-1"></i>Pickup City / Address
+                        </label>
+                        <input type="text" id="taxi-pickup-input" value="Delhi Airport / NCR" class="w-full bg-transparent text-xs font-black text-navy-900 outline-none">
+                    </div>
+                    <div class="p-3 rounded-2xl border border-slate-300 bg-slate-50 focus-within:border-warmOrange-500 focus-within:bg-white transition-all">
+                        <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">
+                            <i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>Drop Destination
+                        </label>
+                        <input type="text" id="taxi-drop-input" value="Manali Mall Road / Solang" class="w-full bg-transparent text-xs font-black text-navy-900 outline-none">
+                    </div>
+                    <div class="p-3 rounded-2xl border border-slate-300 bg-slate-50 focus-within:border-warmOrange-500 focus-within:bg-white transition-all">
+                        <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">
+                            <i class="fa-solid fa-calendar-day text-warmOrange-500 mr-1"></i>Departure Date & Time
+                        </label>
+                        <input type="text" id="taxi-time-input" value="Tomorrow, 06:00 AM" class="w-full bg-transparent text-xs font-black text-navy-900 outline-none">
+                    </div>
+                    <div class="p-3 rounded-2xl border border-slate-300 bg-slate-50 focus-within:border-warmOrange-500 focus-within:bg-white transition-all flex items-center justify-between">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">
+                                <i class="fa-solid fa-users text-blue-500 mr-1"></i>Passengers & Bags
+                            </label>
+                            <span id="taxi-passengers-display" class="text-xs font-black text-navy-900">4 Travellers, 2 Bags</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="adjustTaxiPax(-1)" class="w-7 h-7 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 font-black flex items-center justify-center text-xs">-</button>
+                            <button type="button" onclick="adjustTaxiPax(1)" class="w-7 h-7 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-black flex items-center justify-center text-xs">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vehicle Fleet Selection Grid & Summary Breakdown -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Fleet Options Column -->
+                <div class="lg:col-span-8 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-black text-navy-900 flex items-center gap-2">
+                            <i class="fa-solid fa-car-side text-warmOrange-500"></i>
+                            <span>Select Your Cab Category</span>
+                        </h3>
+                        <span class="text-xs text-emerald-600 font-bold"><i class="fa-solid fa-shield-check mr-1"></i>All Cabs AC & Sanitised</span>
+                    </div>
+
+                    <div id="taxi-fleet-grid" class="space-y-3">
+                        <!-- Populated by renderTaxiFleetGrid() -->
+                    </div>
+                </div>
+
+                <!-- Selected Cab Fare Breakdown & Confirmation Card -->
+                <div class="lg:col-span-4 space-y-4 sticky top-24">
+                    <div id="taxi-fare-breakdown-card" class="sarv-card p-5 rounded-3xl bg-white border-2 border-warmOrange-500 shadow-xl space-y-4">
+                        <!-- Populated by updateTaxiFareBreakdown() -->
+                    </div>
+
+                    <!-- Assurance Card -->
+                    <div class="p-4 rounded-2xl bg-slate-100 border border-slate-200 text-[11px] text-slate-600 space-y-2">
+                        <div class="flex items-center gap-2 font-black text-navy-900">
+                            <i class="fa-solid fa-badge-check text-emerald-600"></i>
+                            <span>Sarvyatri Cab Assurance</span>
+                        </div>
+                        <ul class="space-y-1 list-disc pl-4">
+                            <li>Verified hill-driving certified driver</li>
+                            <li>Live GPS tracking shared with family</li>
+                            <li>Tolls, fuel & driver night charges included in total</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Modal Overlay (hidden by default) -->
+            <div id="taxi-booking-confirm-modal" class="fixed inset-0 modal-backdrop bg-navy-950/80 backdrop-blur-md z-50 hidden items-center justify-center p-4 overflow-y-auto">
+                <div class="sarv-card bg-white rounded-3xl max-w-md w-full p-6 pb-28 sm:pb-32 modal-dock-clearance text-center space-y-4 shadow-2xl border border-slate-200 max-h-[92vh] overflow-y-auto">
+                    <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto shadow-inner">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                            Booking Confirmed
+                        </span>
+                        <h3 class="text-xl font-black text-navy-900 mt-2">Cab Dispatched Successfully!</h3>
+                        <p class="text-xs text-slate-500 mt-1">Your ride has been scheduled. Chauffeur details assigned below.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-2 text-xs">
+                        <div class="flex justify-between font-black text-navy-900 pb-2 border-b border-slate-200">
+                            <span>Trip Reference:</span>
+                            <span class="text-warmOrange-600 font-mono" id="confirmed-booking-id">SY-CAB-78210</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Vehicle:</span>
+                            <span class="font-bold text-navy-900" id="confirmed-vehicle-name">Toyota Innova Crysta</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Pickup:</span>
+                            <span class="font-bold text-navy-900" id="confirmed-pickup-loc">Delhi Airport</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Destination:</span>
+                            <span class="font-bold text-navy-900" id="confirmed-drop-loc">Manali Mall Road</span>
+                        </div>
+                        <div class="flex justify-between font-black text-navy-900 pt-2 border-t border-slate-200 text-sm">
+                            <span>Total Estimated Fare:</span>
+                            <span class="text-emerald-600" id="confirmed-total-fare">₹9,999</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-2">
+                        <button type="button" onclick="closeTaxiConfirmModal(); switchPage('home');" class="btn-navy flex-1 py-3 rounded-xl font-black text-xs">
+                            <i class="fa-solid fa-house mr-1.5"></i>Home Dashboard
+                        </button>
+                        <button type="button" onclick="closeTaxiConfirmModal(); showToast('Driver assigned: Rajesh Kumar (+91 98765 43210). ETA 15 mins.', 'fa-phone');" class="btn-warm flex-1 py-3 rounded-xl font-black text-xs">
+                            <i class="fa-solid fa-phone mr-1.5"></i>Call Chauffeur
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- FLOATING DOCK (macOS Style Interactive Dock) -->
+    <!-- ======================================================== -->
+    <nav class="floating-dock-container" id="sarv-floating-dock">
+        <div class="dock-item active" onclick="switchPage('home')" data-dock="home">
+            <span class="dock-tooltip">Home</span>
+            <i class="fa-solid fa-house-chimney text-base"></i>
+        </div>
+        <div class="dock-item" onclick="switchPage('questions')" data-dock="questions">
+            <span class="dock-tooltip">Plan Trip</span>
+            <i class="fa-solid fa-sliders text-base"></i>
+        </div>
+        <div class="dock-item" onclick="switchPage('car')" data-dock="car">
+            <span class="dock-tooltip">Car Routes</span>
+            <i class="fa-solid fa-car text-base"></i>
+        </div>
+        <div class="dock-item" onclick="switchPage('places')" data-dock="places">
+            <span class="dock-tooltip">Places</span>
+            <i class="fa-solid fa-map-pin text-base"></i>
+        </div>
+        <div class="dock-item" onclick="switchPage('hotels')" data-dock="hotels">
+            <span class="dock-tooltip">Hotels & Escrow</span>
+            <i class="fa-solid fa-hotel text-base"></i>
+        </div>
+        <div class="dock-item" onclick="switchPage('payment')" data-dock="payment">
+            <span class="dock-tooltip">Payment</span>
+            <i class="fa-solid fa-credit-card text-base"></i>
+        </div>
+        <div class="dock-item" onclick="switchPage('navigation-view')" data-dock="navigation-view">
+            <span class="dock-tooltip">Live Map</span>
+            <i class="fa-solid fa-location-arrow text-base"></i>
+        </div>
+        <div class="dock-item" onclick="openQuickAccessModal()" data-dock="quick-access">
+            <span class="dock-tooltip">Quick Access</span>
+            <i class="fa-solid fa-bolt text-base"></i>
+        </div>
+        <div class="dock-item" onclick="openSignupModal()" data-dock="signup">
+            <span class="dock-tooltip">Sign Up / Club</span>
+            <i class="fa-solid fa-user-plus text-base"></i>
+        </div>
+        <div class="dock-item" onclick="openFeedbackModal()" data-dock="feedback">
+            <span class="dock-tooltip">Feedback</span>
+            <i class="fa-regular fa-comment-dots text-base"></i>
+        </div>
+    </nav>
+
+    <!-- ======================================================== -->
+    <!-- MODAL 1: HOTEL DETAIL VIEW -->
+    <!-- ======================================================== -->
+    <div id="modal-hotel-detail" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto z-50">
+        <div class="sarv-card w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl space-y-5 max-h-[92vh] overflow-y-auto bg-white p-5 sm:p-7 pb-28 sm:pb-32 modal-dock-clearance border border-slate-300">
+            
+            <!-- Header -->
+            <div class="flex items-start justify-between border-b border-slate-200 pb-3 gap-3">
+                <div>
+                    <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <span id="modal-hotel-category" class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-warmOrange-100 text-warmOrange-700">Luxury Heritage Resort</span>
+                        <span id="modal-hotel-rating-badge" class="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 flex items-center gap-1">
+                            <i class="fa-solid fa-star text-amber-500"></i><span id="modal-hotel-rating-text">4.9 ★ (340 stays)</span>
+                        </span>
+                    </div>
+                    <h3 id="modal-hotel-name" class="text-xl sm:text-2xl font-black text-navy-900 leading-tight">Grand Alpine Cedar Sanctuary</h3>
+                    <p id="modal-hotel-location" class="text-xs text-slate-600 font-bold flex items-center gap-1 mt-1">
+                        <i class="fa-solid fa-location-dot text-warmOrange-500"></i>
+                        <span id="modal-hotel-location-text">Log Huts Area, Old Manali (1.2 km from Mall Road)</span>
+                    </p>
+                </div>
+                <button type="button" onclick="closeHotelDetail()" aria-label="Close hotel details modal" class="w-9 h-9 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy-900 flex items-center justify-center transition-colors shrink-0">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <!-- Dynamic Interactive Photo Gallery -->
+            <div class="space-y-2">
+                <div class="relative h-56 sm:h-72 rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-100">
+                    <img id="modal-hotel-main-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1000&auto=format&fit=crop" alt="Hotel Preview" class="w-full h-full object-cover transition-all duration-300">
+                    <span class="absolute bottom-3 left-3 px-3 py-1 rounded-xl bg-navy-950/85 backdrop-blur-sm text-white text-xs font-black shadow flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-halved text-warmOrange-400"></i>
+                        <span>Sarvyatri Escrow-Protected Stay</span>
+                    </span>
+                </div>
+                <!-- Gallery Thumbnails -->
+                <div id="modal-hotel-gallery-strip" class="grid grid-cols-4 gap-2">
+                    <!-- Dynamic Thumbnails -->
+                </div>
+            </div>
+
+            <!-- Property Description -->
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1 text-xs">
+                <span class="text-[10px] font-black uppercase tracking-wider text-slate-500 block">About Property</span>
+                <p id="modal-hotel-description" class="text-slate-700 leading-relaxed font-medium">
+                    <!-- Dynamic description -->
+                </p>
+            </div>
+
+            <!-- Verified Hotel Amenities Grid -->
+            <div class="space-y-2">
+                <span class="text-xs font-black text-navy-900 uppercase tracking-wider block">Property Highlights & Amenities</span>
+                <div id="modal-hotel-amenities" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <!-- Dynamic amenity pills -->
+                </div>
+            </div>
+
+            <!-- Available Room Types & Selection (Key Requirement) -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-black text-navy-900 uppercase tracking-wider block">Select Room Category</span>
+                        <span class="text-[11px] text-slate-600 font-medium">Pick a room to preview pricing & advance escrow</span>
+                    </div>
+                    <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                        <i class="fa-solid fa-bed mr-1"></i>Live Rooms
+                    </span>
+                </div>
+                <div id="modal-hotel-rooms-container" class="space-y-2.5">
+                    <!-- Dynamic Room Selection Cards -->
+                </div>
+            </div>
+
+            <!-- Check-in / Check-out Date and Time Selection -->
+            <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-black text-navy-900 uppercase tracking-wider block">Stay Schedule & Duration</label>
+                    <span id="modal-calculated-nights-badge" class="text-[11px] font-black text-warmOrange-700 bg-warmOrange-50 px-2.5 py-0.5 rounded-full border border-warmOrange-200">
+                        3 Nights Selected
+                    </span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3 rounded-2xl border border-slate-300 bg-white space-y-1">
+                        <span class="text-[10px] font-bold text-slate-600 block">Check-in Date & Time</span>
+                        <div class="flex gap-2">
+                            <input type="date" id="hotel-checkin-date" value="2026-09-12" onchange="updateHotelEscrowCalculations()" class="w-1/2 p-2 rounded-xl border border-slate-300 font-bold text-navy-900 text-xs outline-none focus:border-warmOrange-500">
+                            <input type="time" id="hotel-checkin-time" value="13:00" class="w-1/2 p-2 rounded-xl border border-slate-300 font-bold text-navy-900 text-xs outline-none focus:border-warmOrange-500">
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-2xl border border-slate-300 bg-white space-y-1">
+                        <span class="text-[10px] font-bold text-slate-600 block">Check-out Date & Time</span>
+                        <div class="flex gap-2">
+                            <input type="date" id="hotel-checkout-date" value="2026-09-15" onchange="updateHotelEscrowCalculations()" class="w-1/2 p-2 rounded-xl border border-slate-300 font-bold text-navy-900 text-xs outline-none focus:border-warmOrange-500">
+                            <input type="time" id="hotel-checkout-time" value="11:00" class="w-1/2 p-2 rounded-xl border border-slate-300 font-bold text-navy-900 text-xs outline-none focus:border-warmOrange-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verified Guest Reviews (Key Requirement) -->
+            <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-navy-900 uppercase tracking-wider block">Verified Guest Reviews</span>
+                    <span class="text-[10px] font-bold text-slate-500">Authentic Stays & Feedback</span>
+                </div>
+                <div id="modal-hotel-reviews-container" class="space-y-2">
+                    <!-- Dynamic Reviews -->
+                </div>
+            </div>
+
+            <!-- Advance Booking Escrow Security Policy -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 space-y-3 text-xs">
+                <div class="flex items-center gap-2 font-black text-navy-900">
+                    <i class="fa-solid fa-shield-halved text-warmOrange-600 text-base"></i>
+                    <span>Advance Booking Escrow Protection</span>
+                </div>
+                <p class="text-slate-800 text-[11px] leading-relaxed font-medium">
+                    <strong>Payment Policy:</strong> Pay only a <strong>20% security deposit upfront</strong> to guarantee your room. The <strong>remaining 80% balance is released strictly after your verified checkout</strong>.
+                </p>
+                <div class="pt-2 border-t border-amber-200 grid grid-cols-3 gap-2 text-center">
+                    <div class="p-2 rounded-xl bg-white/80 border border-amber-200">
+                        <span class="text-[10px] font-bold text-slate-500 block">Total Stay (<span id="modal-escrow-nights-count">3 nights</span>)</span>
+                        <span id="modal-total-stay-val" class="font-black text-sm text-navy-900">₹10,497</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-warmOrange-50 border border-warmOrange-300">
+                        <span class="text-[10px] font-black text-warmOrange-700 block">Due Now (20% Escrow)</span>
+                        <span id="modal-escrow-val" class="font-black text-sm text-warmOrange-600">₹2,099</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-white/80 border border-amber-200">
+                        <span class="text-[10px] font-bold text-slate-500 block">Post-Checkout (80%)</span>
+                        <span id="modal-balance-val" class="font-black text-sm text-slate-700">₹8,398</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="modal-reserve-btn" onclick="confirmHotelBooking()" class="btn-warm w-full py-4 rounded-2xl font-black text-sm shadow-xl flex items-center justify-center gap-2">
+                <i class="fa-solid fa-lock"></i>
+                <span id="modal-reserve-btn-text">Reserve with 20% Advance Escrow</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL 2: QUICK ACCESS HUB (All 5 Shortcuts) -->
+    <!-- ======================================================== -->
+    <div id="modal-quick-access" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="sarv-card w-full max-w-md rounded-3xl p-6 pb-28 sm:pb-32 modal-dock-clearance space-y-5 bg-white shadow-2xl max-h-[92vh] overflow-y-auto border border-slate-300">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-xl bg-warmOrange-500 text-white flex items-center justify-center text-sm font-black">
+                        <i class="fa-solid fa-bolt"></i>
+                    </span>
+                    <h3 class="text-lg font-black text-navy-900">Quick Access Hub</h3>
+                </div>
+                <button type="button" onclick="closeQuickAccessModal()" aria-label="Close quick access modal" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-2.5">
+                <!-- 1. Fuel pump finder -->
+                <div onclick="openQuickTool('fuel')" class="card-3d-interactive p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:border-warmOrange-500 cursor-pointer transition-all">
+                    <div class="card-3d-glare"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-gas-pump"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Fuel Pump Finder</span>
+                            <span class="text-[10px] text-slate-600 font-medium">Locate Petrol, Diesel & CNG along highways</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </div>
+
+                <!-- 2. Hotel search -->
+                <div onclick="openQuickTool('hotel')" class="card-3d-interactive p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:border-warmOrange-500 cursor-pointer transition-all">
+                    <div class="card-3d-glare"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-navy-800 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-hotel"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Hotel Search</span>
+                            <span class="text-[10px] text-slate-600 font-medium">Quick city & budget stay directory</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </div>
+
+                <!-- 3. Restaurant search -->
+                <div onclick="openQuickTool('restaurant')" class="card-3d-interactive p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:border-warmOrange-500 cursor-pointer transition-all">
+                    <div class="card-3d-glare"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Restaurant Search</span>
+                            <span class="text-[10px] text-slate-600 font-medium">Dhabas & family restaurants on chosen route</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </div>
+
+                <!-- 4. Route navigation / ETA -->
+                <div onclick="openQuickTool('navigation')" class="card-3d-interactive p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:border-warmOrange-500 cursor-pointer transition-all">
+                    <div class="card-3d-glare"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-location-arrow"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Route Navigation / ETA</span>
+                            <span class="text-[10px] text-slate-600 font-medium">Direct distance, cost & time calculator</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </div>
+
+                <!-- 5. Direct taxi booking -->
+                <div onclick="openQuickTool('taxi')" class="card-3d-interactive p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:border-warmOrange-500 cursor-pointer transition-all">
+                    <div class="card-3d-glare"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-100 text-yellow-700 flex items-center justify-center text-base">
+                            <i class="fa-solid fa-taxi"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-xs text-navy-900 block">Direct Taxi Booking</span>
+                            <span class="text-[10px] text-slate-600 font-medium">Instant on-demand cab dispatch</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL 3: POST-TRIP FEEDBACK FORM (Specific 3 Questions) -->
+    <!-- ======================================================== -->
+    <div id="modal-feedback" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="sarv-card w-full max-w-md rounded-3xl p-6 pb-28 sm:pb-32 modal-dock-clearance space-y-5 bg-white shadow-2xl max-h-[92vh] overflow-y-auto border border-slate-300">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div>
+                    <span class="text-[10px] font-black uppercase tracking-wider text-warmOrange-600">Traveler Community Trust</span>
+                    <h3 class="text-xl font-black text-navy-900">Post-Trip Feedback</h3>
+                </div>
+                <button type="button" onclick="closeFeedbackModal()" aria-label="Close feedback modal" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitTripFeedback(event)" class="space-y-4 text-xs">
+                <!-- Question 1: Hotel Match -->
+                <div class="p-4 rounded-2xl space-y-2 bg-slate-50 border border-slate-200">
+                    <label class="font-black text-navy-900 block text-xs">
+                        1. Did the hotel match what was shown?
+                    </label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-200 cursor-pointer">
+                            <input type="radio" name="feedback_hotel" value="yes" checked class="text-warmOrange-500">
+                            <span class="font-bold text-slate-800">Yes, exactly matched</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-200 cursor-pointer">
+                            <input type="radio" name="feedback_hotel" value="no" class="text-warmOrange-500">
+                            <span class="font-bold text-slate-800">No, discrepancies found</span>
+                        </label>
+                    </div>
+                    <textarea placeholder="Specific comments on room hygiene, view or escrow settlement..." class="w-full p-2.5 rounded-xl border border-slate-300 font-medium text-xs text-navy-900 bg-white outline-none focus:border-navy-600 h-16 resize-none"></textarea>
+                </div>
+
+                <!-- Question 2: Destination Comfort -->
+                <div class="p-4 rounded-2xl space-y-2 bg-slate-50 border border-slate-200">
+                    <label class="font-black text-navy-900 block text-xs">
+                        2. Was the destination comfortable as described?
+                    </label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-200 cursor-pointer">
+                            <input type="radio" name="feedback_comfort" value="yes" checked class="text-warmOrange-500">
+                            <span class="font-bold text-slate-800">Yes, very comfortable</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-200 cursor-pointer">
+                            <input type="radio" name="feedback_comfort" value="no" class="text-warmOrange-500">
+                            <span class="font-bold text-slate-800">No, challenging conditions</span>
+                        </label>
+                    </div>
+                    <textarea placeholder="Comments on road connectivity, crowd levels, seasonal weather..." class="w-full p-2.5 rounded-xl border border-slate-300 font-medium text-xs text-navy-900 bg-white outline-none focus:border-navy-600 h-16 resize-none"></textarea>
+                </div>
+
+                <!-- Question 3: Safety Perception -->
+                <div class="p-4 rounded-2xl space-y-2 bg-slate-50 border border-slate-200">
+                    <label class="font-black text-navy-900 block text-xs">
+                        3. Did you feel any place was unsafe?
+                    </label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-200 cursor-pointer">
+                            <input type="radio" name="feedback_safety" value="no" checked class="text-warmOrange-500">
+                            <span class="font-bold text-slate-800">No, felt totally safe</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-200 cursor-pointer">
+                            <input type="radio" name="feedback_safety" value="yes" class="text-warmOrange-500">
+                            <span class="font-bold text-rose-600">Yes, felt unsafe</span>
+                        </label>
+                    </div>
+                    <textarea placeholder="If unsafe, please specify spot location, activity or time of incident to help other travelers..." class="w-full p-2.5 rounded-xl border border-slate-300 font-medium text-xs text-navy-900 bg-white outline-none focus:border-rose-500 h-16 resize-none"></textarea>
+                </div>
+
+                <button type="submit" class="btn-warm w-full py-3.5 rounded-2xl font-black text-sm shadow-xl flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Submit Verified Feedback</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL 4: SIGNUP & MEMBER AUTH FORM -->
+    <!-- ======================================================== -->
+    <div id="modal-signup" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-4 overflow-y-auto">
+        <!-- EFFECT: Signup Form Polish (Subtle Animated Gradient Border) -->
+        <div class="modal-gradient-border sarv-card w-full max-w-md rounded-3xl p-6 sm:p-7 pb-28 sm:pb-32 modal-dock-clearance space-y-5 bg-white shadow-2xl relative overflow-hidden border border-slate-300 max-h-[92vh] overflow-y-auto">
+            
+            <!-- Close Button -->
+            <button type="button" onclick="closeSignupModal()" aria-label="Close authentication modal" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center z-20">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Brand Header with Official Logo -->
+            <div class="text-center space-y-2 pt-1">
+                <div class="w-16 h-16 rounded-2xl bg-white border-2 border-navy-900 shadow-sm p-1 mx-auto flex items-center justify-center overflow-hidden">
+                    <img src="logo.jpg" alt="Sarvyatri Logo" class="w-full h-full object-cover object-top" onerror="this.src='assets/logo.jpg'">
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-navy-900" id="auth-modal-title">Join Sarvyatri Circle</h3>
+                    <p class="text-xs text-slate-600 font-medium" id="auth-modal-sub">Verified Indian Travel Community • Escrow-Secured Journeys</p>
+                </div>
+            </div>
+
+            <!-- EFFECT: Signup Form Polish (Sliding Tab Indicator) -->
+            <div class="grid grid-cols-2 p-1 rounded-2xl bg-slate-100 text-xs font-bold relative">
+                <div id="auth-tab-pill" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-xl bg-white shadow-sm transition-transform duration-300 ease-out z-0 pointer-events-none"></div>
+                <button type="button" id="tab-signup" onclick="toggleAuthMode('signup')" class="py-2 rounded-xl text-navy-900 font-black relative z-10 transition-colors">
+                    Sign Up
+                </button>
+                <button type="button" id="tab-signin" onclick="toggleAuthMode('signin')" class="py-2 rounded-xl text-slate-500 font-bold relative z-10 transition-colors">
+                    Sign In
+                </button>
+            </div>
+
+            <!-- Signup / Signin Form -->
+            <form onsubmit="handleSignupSubmit(event)" class="space-y-3.5 text-xs">
+                
+                <!-- Full Name -->
+                <div id="field-auth-name" class="space-y-1">
+                    <label class="font-black text-navy-900 uppercase tracking-wider text-[10px]">Full Name</label>
+                    <div class="gooey-wrapper p-2.5 rounded-xl border border-slate-300 bg-white">
+                        <i class="fa-regular fa-user text-slate-400 mr-2"></i>
+                        <input type="text" id="auth-name-input" placeholder="e.g. Aarav Sharma" class="gooey-input-field w-full font-bold text-xs text-navy-900 outline-none">
+                        <div class="gooey-blob-container"><div class="gooey-blob-1"></div><div class="gooey-blob-2"></div></div>
+                    </div>
+                </div>
+
+                <!-- Email or Mobile -->
+                <div class="space-y-1">
+                    <label class="font-black text-navy-900 uppercase tracking-wider text-[10px]">Mobile Number / Email</label>
+                    <div class="gooey-wrapper p-2.5 rounded-xl border border-slate-300 bg-white">
+                        <i class="fa-regular fa-envelope text-slate-400 mr-2"></i>
+                        <input type="text" id="auth-contact-input" required placeholder="name@example.com or +91 9876543210" class="gooey-input-field w-full font-bold text-xs text-navy-900 outline-none">
+                        <div class="gooey-blob-container"><div class="gooey-blob-1"></div><div class="gooey-blob-2"></div></div>
+                    </div>
+                </div>
+
+                <!-- Password with Show/Hide -->
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center">
+                        <label class="font-black text-navy-900 uppercase tracking-wider text-[10px]">Password</label>
+                        <button type="button" onclick="togglePasswordVisibility()" class="text-[10px] font-bold text-warmOrange-600 hover:underline">
+                            <span id="pwd-toggle-text">Show</span>
+                        </button>
+                    </div>
+                    <div class="gooey-wrapper p-2.5 rounded-xl border border-slate-300 bg-white">
+                        <i class="fa-solid fa-lock text-slate-400 mr-2"></i>
+                        <input type="password" id="auth-password-input" required placeholder="Minimum 8 characters" class="gooey-input-field w-full font-bold text-xs text-navy-900 outline-none">
+                        <div class="gooey-blob-container"><div class="gooey-blob-1"></div><div class="gooey-blob-2"></div></div>
+                    </div>
+                </div>
+
+                <!-- Preferred Travel Persona -->
+                <div id="field-auth-tags" class="space-y-1.5 pt-0.5">
+                    <label class="font-black text-navy-900 uppercase tracking-wider text-[10px]">Travel Style (Choose your vibe)</label>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span onclick="togglePersonaChip(this)" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-[11px] font-bold text-slate-700 cursor-pointer hover:border-warmOrange-500 transition-colors">
+                            🚗 Road Tripper
+                        </span>
+                        <span onclick="togglePersonaChip(this)" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-[11px] font-bold text-slate-700 cursor-pointer hover:border-warmOrange-500 transition-colors">
+                            🏔️ Mountain Hiker
+                        </span>
+                        <span onclick="togglePersonaChip(this)" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-[11px] font-bold text-slate-700 cursor-pointer hover:border-warmOrange-500 transition-colors">
+                            🏰 Heritage & Forts
+                        </span>
+                        <span onclick="togglePersonaChip(this)" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-[11px] font-bold text-slate-700 cursor-pointer hover:border-warmOrange-500 transition-colors">
+                            🏖️ Coastal Explorer
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Escrow Security Assurance Note -->
+                <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 flex items-start gap-2">
+                    <i class="fa-solid fa-shield-halved text-warmOrange-600 mt-0.5 text-xs"></i>
+                    <p class="text-[10px] text-slate-800 leading-tight font-medium">
+                        <strong>Member Assurance:</strong> All your bookings are protected by Sarvyatri's 20% advance security escrow policy.
+                    </p>
+                </div>
+
+                <!-- Submit Button with Hover Border Gradient -->
+                <div class="hover-border-gradient w-full">
+                    <button type="submit" class="btn-warm w-full py-3.5 rounded-2xl font-black text-xs sm:text-sm shadow-xl flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-user-check"></i>
+                        <span id="auth-submit-btn-text">Create Free Account</span>
+                    </button>
+                </div>
+
+                <!-- Social Quick Logins -->
+                <div class="pt-2 text-center space-y-2">
+                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Or continue with</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="socialLogin('Google')" class="p-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 flex items-center justify-center text-slate-800 text-xs font-bold gap-1.5 transition-colors">
+                            <i class="fa-brands fa-google text-rose-500"></i>
+                            <span>Google</span>
+                        </button>
+                        <button type="button" onclick="socialLogin('Apple')" class="p-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 flex items-center justify-center text-slate-800 text-xs font-bold gap-1.5 transition-colors">
+                            <i class="fa-brands fa-apple text-slate-900"></i>
+                            <span>Apple</span>
+                        </button>
+                        <button type="button" onclick="socialLogin('OTP')" class="p-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 flex items-center justify-center text-slate-800 text-xs font-bold gap-1.5 transition-colors">
+                            <i class="fa-solid fa-mobile-screen text-emerald-600"></i>
+                            <span>OTP</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL 5: PAYMENT CONFIRMATION & ESCROW RECEIPT -->
+    <!-- ======================================================== -->
+    <div id="modal-payment-success" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto z-50">
+        <div class="sarv-card w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto bg-white p-5 sm:p-7 pb-28 sm:pb-32 modal-dock-clearance border border-slate-300 relative">
+            <!-- Close Button -->
+            <button type="button" onclick="closePaymentSuccessModal()" aria-label="Close receipt modal" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy-900 flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+
+            <!-- Success Animation Icon Header -->
+            <div class="text-center pt-2 pb-1 space-y-2">
+                <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl shadow-lg ring-8 ring-emerald-50 animate-bounce">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600 block">Payment Verified & Escrow Secured</span>
+                    <h3 class="text-xl sm:text-2xl font-black text-navy-900">Booking Confirmed!</h3>
+                    <p class="text-xs text-slate-600 font-medium mt-0.5">Your 20% advance security deposit is safely locked in escrow.</p>
+                </div>
+            </div>
+
+            <!-- Booking Certificate Card -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-navy-900 via-navy-950 to-slate-900 text-white space-y-3 shadow-md border border-navy-800">
+                <!-- Certificate Official Brand Banner -->
+                <div class="flex items-center justify-between border-b border-navy-800/80 pb-2.5">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-white p-0.5 flex items-center justify-center overflow-hidden">
+                            <img src="logo.jpg" alt="Sarvyatri" class="w-full h-full object-cover object-top" onerror="this.src='assets/logo.jpg'">
+                        </div>
+                        <div>
+                            <span class="text-xs font-black tracking-wider text-white block leading-none">SARVYATRI</span>
+                            <span class="text-[8px] font-bold tracking-[0.2em] text-amber-400 uppercase block mt-0.5">OFFICIAL TRIP PASS</span>
+                        </div>
+                    </div>
+                    <span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-navy-800/80 text-amber-300 border border-navy-700">SIH 2026</span>
+                </div>
+
+                <div class="flex items-center justify-between border-b border-navy-800 pb-2.5">
+                    <div>
+                        <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">Booking Reference</span>
+                        <span id="success-booking-id" class="text-sm font-black text-white tracking-wider">SY-2026-MNL-7842</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider block">Escrow Status</span>
+                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold text-[10px] border border-emerald-500/40 inline-flex items-center gap-1">
+                            <i class="fa-solid fa-shield-halved"></i> Active & Protected
+                        </span>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex justify-between text-slate-300">
+                        <span class="font-bold text-slate-400">Hotel / Stay:</span>
+                        <span id="success-hotel-name" class="font-black text-white text-right">Grand Alpine Cedar Sanctuary</span>
+                    </div>
+                    <div class="flex justify-between text-slate-300">
+                        <span class="font-bold text-slate-400">Room Category:</span>
+                        <span id="success-room-name" class="font-bold text-amber-300 text-right">Deluxe Cedar Balcony Suite</span>
+                    </div>
+                    <div class="flex justify-between text-slate-300">
+                        <span class="font-bold text-slate-400">Duration:</span>
+                        <span id="success-stay-dates" class="font-bold text-white text-right">12 Sep – 15 Sep 2026 (3 Nights)</span>
+                    </div>
+                    <div class="flex justify-between text-slate-300">
+                        <span class="font-bold text-slate-400">Route & Destination:</span>
+                        <span id="success-route-name" class="font-bold text-white text-right">Delhi → Manali</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Receipt Breakdown -->
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                <div class="flex justify-between items-center text-slate-700">
+                    <span class="font-medium">Total Stay Tariff:</span>
+                    <span id="success-total-stay" class="font-bold text-navy-900">₹10,497</span>
+                </div>
+                <div class="flex justify-between items-center text-emerald-800 bg-emerald-50/80 p-2 rounded-xl border border-emerald-200">
+                    <span class="font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-lock text-emerald-600"></i>
+                        Paid Today (20% Escrow):
+                    </span>
+                    <span id="success-escrow-paid" class="font-black text-sm text-emerald-700">₹2,099</span>
+                </div>
+                <div class="flex justify-between items-center text-slate-600 pt-1 border-t border-slate-200">
+                    <span class="font-medium">Remaining Due (80% Post-Checkout):</span>
+                    <span id="success-balance-due" class="font-bold text-slate-800">₹8,398</span>
+                </div>
+                <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1">
+                    <span>Payment Method:</span>
+                    <span id="success-payment-method" class="font-bold text-navy-900 uppercase">UPI (GPay/PhonePe)</span>
+                </div>
+                <div class="flex justify-between items-center text-[11px] text-slate-500">
+                    <span>Transaction ID:</span>
+                    <span id="success-txn-id" class="font-mono text-slate-700 font-bold">TXN-8849204123</span>
+                </div>
+            </div>
+
+            <!-- Escrow Guarantee Badge -->
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 flex items-center gap-2.5 text-xs">
+                <i class="fa-solid fa-shield-halved text-warmOrange-600 text-lg shrink-0"></i>
+                <p class="text-[11px] text-slate-800 font-medium leading-tight">
+                    <strong>Sarvyatri Escrow Guarantee:</strong> The hotel does not receive your 80% balance until your check-out is complete and verified without incident.
+                </p>
+            </div>
+
+            <!-- Modal Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-2.5 pt-1">
+                <button type="button" onclick="printBookingReceipt()" class="px-4 py-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-navy-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all sm:w-auto">
+                    <i class="fa-solid fa-print"></i><span>Save Receipt</span>
+                </button>
+                <button type="button" onclick="closePaymentSuccessModal(); switchPage('navigation-view');" class="btn-warm flex-1 py-3.5 rounded-xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Navigate on Live Map</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- NOTIFICATION TOAST -->
+    <!-- ======================================================== -->
+    <div id="sarv-toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[110] hidden items-center gap-3 px-5 py-3.5 rounded-2xl bg-navy-900 text-white text-xs font-bold shadow-2xl transition-all border border-navy-700">
+        <i id="toast-icon" class="fa-solid fa-check-circle text-amber-400"></i>
+        <span id="toast-text">Success message</span>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- JAVASCRIPT LOGIC ENGINES (Rock-Solid, Fast & Safe) -->
+    <!-- ======================================================== -->
+</body>
+</html>

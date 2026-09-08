@@ -1,0 +1,597 @@
+:root {
+            --brand-navy: #0B1B3D;
+            --brand-navy-light: #162A5A;
+            --brand-accent: #E67E22;
+            --brand-accent-hover: #D35400;
+            --brand-warm-gold: #F59E0B;
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border-color: #CBD5E1;
+            --text-main: #0B1B3D;
+            --text-muted: #475569;
+        }
+
+        /* ------------------------------------------------------------- */
+        /* VIBRANT DYNAMIC AMBIENT TRAVEL BACKGROUND & PARTICLES */
+        /* ------------------------------------------------------------- */
+        @keyframes ambientGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatOrb1 {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(60px, -40px) scale(1.12); }
+            66% { transform: translate(-30px, 50px) scale(0.92); }
+        }
+
+        @keyframes floatOrb2 {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(-50px, 60px) scale(1.08); }
+            66% { transform: translate(40px, -30px) scale(0.95); }
+        }
+
+        @keyframes floatOrb3 {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(30px, -60px) scale(1.15); }
+        }
+
+        /* Ambient Dynamic Background Layers */
+        .sarv-ambient-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(145deg, #F6F8FC 0%, #EDF2F9 45%, #E5EDF7 100%);
+        }
+
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.42;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .ambient-orb-1 {
+            top: -5%;
+            left: -5%;
+            width: 520px;
+            height: 520px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.45) 0%, rgba(230, 126, 34, 0.25) 60%, transparent 80%);
+            animation: floatOrb1 18s ease-in-out infinite alternate;
+        }
+
+        .ambient-orb-2 {
+            top: 25%;
+            right: -8%;
+            width: 580px;
+            height: 580px;
+            background: radial-gradient(circle, rgba(37, 91, 165, 0.35) 0%, rgba(14, 165, 233, 0.22) 55%, transparent 75%);
+            animation: floatOrb2 22s ease-in-out infinite alternate;
+        }
+
+        .ambient-orb-3 {
+            bottom: 5%;
+            left: 10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(56, 189, 248, 0.2) 60%, transparent 75%);
+            animation: floatOrb3 20s ease-in-out infinite alternate;
+        }
+
+        .ambient-orb-4 {
+            top: 60%;
+            right: 20%;
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(230, 126, 34, 0.32) 0%, rgba(245, 158, 11, 0.18) 60%, transparent 80%);
+            animation: floatOrb1 25s ease-in-out infinite alternate;
+        }
+
+        /* Topographic Contour Texture Overlay */
+        .ambient-topography {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(11, 27, 61, 0.07) 1px, transparent 1px), radial-gradient(rgba(230, 126, 34, 0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        #sarv-ambient-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ------------------------------------------------------------- */
+        /* HIGH-CONTRAST ACCESSIBLE BUTTONS */
+        /* ------------------------------------------------------------- */
+        .btn-warm {
+            background-color: var(--brand-accent) !important;
+            color: #FFFFFF !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 20;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 14px 0 rgba(230, 126, 34, 0.4);
+        }
+        .btn-warm:hover {
+            background-color: var(--brand-accent-hover) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px -2px rgba(230, 126, 34, 0.55);
+        }
+        .btn-warm:active {
+            transform: scale(0.97);
+        }
+
+        .btn-navy {
+            background-color: var(--brand-navy) !important;
+            color: #FFFFFF !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 20;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 14px 0 rgba(11, 27, 61, 0.3);
+        }
+        .btn-navy:hover {
+            background-color: var(--brand-navy-light) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -2px rgba(11, 27, 61, 0.45);
+        }
+        .btn-navy:active {
+            transform: scale(0.97);
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT: Hover Border Gradient (Aceternity-style Rotating Border Light) */
+        /* ------------------------------------------------------------- */
+        .hover-border-gradient {
+            position: relative;
+            display: inline-flex;
+            border-radius: 1.25rem;
+            padding: 2.5px;
+            overflow: hidden;
+            background: transparent;
+            box-shadow: 0 4px 20px -2px rgba(230, 126, 34, 0.35);
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            isolation: isolate;
+        }
+
+        .hover-border-gradient::before {
+            content: '';
+            position: absolute;
+            inset: -100%;
+            background: conic-gradient(from 0deg at 50% 50%, #F59E0B 0deg, #E67E22 90deg, #255BA5 180deg, #0B1B3D 270deg, #F59E0B 360deg);
+            animation: borderGradientSpin 3.5s linear infinite;
+            opacity: 0.75;
+            transition: opacity 0.3s ease, filter 0.3s ease;
+            z-index: 0;
+        }
+
+        .hover-border-gradient:hover::before {
+            opacity: 1;
+            filter: brightness(1.25) saturate(1.2);
+            animation-duration: 2s;
+        }
+
+        .hover-border-gradient:hover {
+            box-shadow: 0 0 28px -2px rgba(230, 126, 34, 0.65), 0 0 12px rgba(245, 158, 11, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .hover-border-gradient > button, .hover-border-gradient > a, .hover-border-gradient > div {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes borderGradientSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT: 3D Card Effect (Perspective Tilt & Dynamic Specular Glare) */
+        /* ------------------------------------------------------------- */
+        .card-3d-interactive {
+            transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            will-change: transform;
+            position: relative;
+        }
+
+        .card-3d-interactive:hover {
+            box-shadow: 0 20px 40px -10px rgba(11, 27, 61, 0.22), 0 0 0 1px rgba(245, 158, 11, 0.4);
+            border-color: #E67E22 !important;
+        }
+
+        .card-3d-glare {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            background: radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.32) 0%, rgba(245, 158, 11, 0.08) 45%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 25;
+        }
+
+        .card-3d-interactive:hover .card-3d-glare {
+            opacity: 1;
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT: Container Text Flip (3D Rotary Flipping Words) */
+        /* ------------------------------------------------------------- */
+        .flip-container {
+            display: inline-block;
+            perspective: 900px;
+            vertical-align: bottom;
+            height: 1.35em;
+            min-width: 14ch; /* Fixes layout shifting when word length changes */
+            overflow: hidden;
+            position: relative;
+            text-align: left;
+            cursor: default;
+        }
+
+        .flip-word {
+            display: inline-block;
+            transform-origin: 50% 100%;
+            transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
+            white-space: nowrap;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .flip-word.flip-in {
+            transform: rotateX(0deg) translateY(0);
+            opacity: 1;
+        }
+
+        .flip-word.flip-out {
+            transform: rotateX(-90deg) translateY(-85%);
+            opacity: 0;
+        }
+
+        .flip-word.flip-next {
+            transform: rotateX(90deg) translateY(85%);
+            opacity: 0;
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT: Gooey Input (SVG Filter Metaball Merging Glow on Focus) */
+        /* ------------------------------------------------------------- */
+        .gooey-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gooey-wrapper:focus-within {
+            border-color: #E67E22 !important;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.22), 0 6px 20px -2px rgba(230, 126, 34, 0.2) !important;
+        }
+
+        .gooey-blob-container {
+            position: absolute;
+            inset: -4px;
+            pointer-events: none;
+            filter: url('#gooey-filter');
+            z-index: 0;
+            border-radius: inherit;
+            overflow: visible;
+        }
+
+        .gooey-blob-1, .gooey-blob-2 {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: radial-gradient(circle, #F59E0B 20%, #E67E22 80%);
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .gooey-blob-1 { left: 16px; top: calc(50% - 11px); }
+        .gooey-blob-2 { right: 16px; top: calc(50% - 11px); }
+
+        .gooey-wrapper:focus-within .gooey-blob-1 {
+            opacity: 0.9;
+            transform: scale(1.35) translateY(-14px);
+        }
+
+        .gooey-wrapper:focus-within .gooey-blob-2 {
+            opacity: 0.9;
+            transform: scale(1.35) translateY(14px);
+        }
+
+        .gooey-input-field {
+            position: relative;
+            z-index: 2;
+            background-color: transparent;
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT: Floating Dock (macOS-Style Magnification & Detached Pill) */
+        /* ------------------------------------------------------------- */
+        .floating-dock-container, .floating-dock-wrap {
+            position: fixed !important;
+            bottom: 1.5rem !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 90 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.5rem;
+            padding: 0.55rem 0.95rem;
+            background: rgba(11, 27, 61, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 9999px;
+            border: 1.5px solid rgba(255, 255, 255, 0.24);
+            box-shadow: 0 20px 48px -4px rgba(11, 27, 61, 0.6), 0 0 0 1px rgba(245, 158, 11, 0.35), 0 0 30px rgba(230, 126, 34, 0.25);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+
+        .dock-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            color: #94A3B8;
+            font-size: 1.15rem;
+            transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            cursor: pointer;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-origin: bottom center;
+        }
+
+        .dock-item:hover {
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(245, 158, 11, 0.7);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4), 0 0 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .dock-item.active {
+            color: #FFFFFF;
+            background: #E67E22;
+            border-color: #F59E0B;
+            box-shadow: 0 4px 16px rgba(230, 126, 34, 0.6), 0 0 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .dock-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #F59E0B;
+            box-shadow: 0 0 8px #F59E0B;
+        }
+
+        .dock-tooltip {
+            position: absolute;
+            top: -42px;
+            background: rgba(11, 27, 61, 0.96);
+            color: #FFFFFF;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 8px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(4px);
+            transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            left: 50%;
+            z-index: 100;
+        }
+
+        .dock-item:hover .dock-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT: Direction Aware Hover (Edge-Sliding Overlay on Media Cards) */
+        /* ------------------------------------------------------------- */
+        .direction-aware-card {
+            position: relative;
+            overflow: hidden;
+            contain: paint;
+        }
+
+        .direction-aware-card img {
+            transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+        }
+
+        .direction-aware-card:hover img {
+            transform: scale(1.08);
+            filter: brightness(1.05) saturate(1.08);
+        }
+
+        .direction-aware-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 22;
+            background: linear-gradient(to top, rgba(11, 27, 61, 0.88) 0%, rgba(11, 27, 61, 0.4) 60%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0.85rem;
+            color: #FFFFFF;
+            opacity: 0;
+            transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+            will-change: transform, opacity;
+        }
+
+        .direction-aware-card.is-hovered .direction-aware-overlay {
+            opacity: 1;
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT: Signup Form Polish (Subtle Animated Gradient Border & Focus) */
+        /* ------------------------------------------------------------- */
+        .modal-gradient-border {
+            position: relative;
+            border: 1.5px solid transparent !important;
+            background-clip: padding-box;
+            box-shadow: 0 25px 60px -15px rgba(11, 27, 61, 0.4), 0 0 0 1px rgba(245, 158, 11, 0.2);
+        }
+
+        .modal-gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.65), rgba(230, 126, 34, 0.45), rgba(37, 91, 165, 0.55), rgba(16, 185, 129, 0.45));
+            background-size: 300% 300%;
+            animation: borderGradientShift 6s ease infinite;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.85;
+        }
+
+        @keyframes borderGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT: Card Spotlight Effect (Aceternity-style Subtle Ambient Glow) */
+        /* ------------------------------------------------------------- */
+        .spotlight-card {
+            position: relative;
+            background-image: radial-gradient(circle 240px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(245, 158, 11, 0.08) 0%, transparent 80%);
+        }
+
+        /* ------------------------------------------------------------- */
+        /* EFFECT 7: APP LOGO PULSE / ROTATE LOADING STATE */
+        /* ------------------------------------------------------------- */
+        @keyframes logoPulseRotate {
+            0% {
+                transform: scale(0.94) rotate(0deg);
+                filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.3));
+            }
+            50% {
+                transform: scale(1.06) rotate(180deg);
+                filter: drop-shadow(0 0 18px rgba(230, 126, 34, 0.65));
+            }
+            100% {
+                transform: scale(0.94) rotate(360deg);
+                filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.3));
+            }
+        }
+
+        .logo-loader-anim {
+            animation: logoPulseRotate 2.2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+
+        /* Page View Switching */
+        .app-page {
+            display: none;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .app-page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Card styles with crisp visibility */
+        .sarv-card {
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .sarv-card:hover {
+            box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.12);
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            accent-color: #E67E22;
+        }
+
+        /* Modal Blur */
+        .modal-backdrop {
+            background-color: rgba(11, 27, 61, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+        }
+
+        /* Modal Bottom Clearance for Floating Dock */
+        .modal-dock-clearance {
+            padding-bottom: 7rem !important; /* 112px clearance for mobile */
+        }
+        @media (min-width: 640px) {
+            .modal-dock-clearance {
+                padding-bottom: 8rem !important; /* 128px clearance for desktop */
+            }
+        }
+
+        /* ------------------------------------------------------------- */
+        /* ACCESSIBILITY: PREFERS REDUCED MOTION SUPPORT */
+        /* ------------------------------------------------------------- */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .card-3d-interactive:hover {
+                transform: none !important;
+            }
+            .ambient-orb, .hover-border-gradient::before, .logo-loader-anim {
+                animation: none !important;
+            }
+        }
